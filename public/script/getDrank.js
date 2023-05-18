@@ -12,6 +12,9 @@ rawFile.onreadystatechange = function() {
 rawFile.send(null);
 
 select = document.getElementById('selectAlcohol');
+if (select === null || select === undefined) {
+    select = document.getElementById('nieuweSelectAlcohol');
+}
 
 for (let key in alcoholDB) {
     let opt = document.createElement('option');
@@ -32,6 +35,9 @@ rawFile.onreadystatechange = function() {
 rawFile.send(null);
 
 select = document.getElementById('selectNonAlcohol');
+if (select === null || select === undefined) {
+    select = document.getElementById('nieuweSelectNonAlcohol');
+}
 
 for (let key in nonAlcoholDB) {
     let opt = document.createElement('option');
