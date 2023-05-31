@@ -7,7 +7,7 @@ function selectEasy(el) {
         console.log(el.parentNode.id);
         if (el.parentNode.id === "nieuweSelectAlcohol" || el.parentNode.id === "nieuweSelectNonAlcohol") {
 
-            let type = el.parentNode.name.replace("nieuweSelect", "");
+            let type = el.parentNode.id.replace("nieuweSelect", "");
             type = type.charAt(0).toLowerCase() + type.slice(1);
             console.log(type);
 
