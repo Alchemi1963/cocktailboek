@@ -31,7 +31,7 @@ function parseForm(data) {
 
 	console.log(data);
 
-	if (data.header.selectAlcohol !== undefined && typeof data.header.selectAlcohol != "string") {
+	if (data.selectAlcohol !== undefined && typeof data.selectAlcohol != "string") {
 		for (let item in data.selectAlcohol) {
 			item = data.selectAlcohol[item];
 			item = item.replaceAll(" ", "_");
@@ -41,7 +41,7 @@ function parseForm(data) {
 				alcohol[item.toLowerCase()] = [data["selectN" + item], data["selectType" + item]];
 			}
 		}
-	} else if (data.header.selectAlcohol !== undefined) {
+	} else if (data.selectAlcohol !== undefined) {
 		let item = data.selectAlcohol.replaceAll(" ", "_");
 		if (data["selectType" + item] === "aanvullen") {
 			alcohol[item.toLowerCase()] = ["1.0", "aanvullen"];
@@ -50,7 +50,7 @@ function parseForm(data) {
 		}
 	}
 
-	if (data.header.selectNonAlcohol !== undefined && typeof data.selectNonAlcohol != "string") {
+	if (data.selectNonAlcohol !== undefined && typeof data.selectNonAlcohol != "string") {
 		for (let item in data.selectNonAlcohol) {
 			item = data.selectNonAlcohol[item];
 			item = item.replaceAll(" ", "_");
@@ -60,7 +60,7 @@ function parseForm(data) {
 				nonAlcohol[item.toLowerCase()] = [data["selectN" + item], data["selectType" + item]];
 			}
 		}
-	} else if (data.header.selectNonAlcohol !== undefined) {
+	} else if (data.selectNonAlcohol !== undefined) {
 		let item = data.selectNonAlcohol.replaceAll(" ", "_");
 		if (data["selectType" + item] === "aanvullen") {
 			nonAlcohol[item.toLowerCase()] = ["1.0", "aanvullen"];
