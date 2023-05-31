@@ -23,7 +23,7 @@ enableButton("reset", "click", function() {
 document.getElementById("alcoholAmount").innerHTML = "";
     document.getElementById("nonAlcoholAmount").innerHTML = "";
 
-    let selectAlcohol = document.getElementById("selectAlcohol");
+    let selectAlcohol = document.getElementById("nieuweSelectAlcohol");
     for (let i = 0; i < selectAlcohol.children.length; i++) {
         let child = selectAlcohol.children.item(i);
         if (child.hasAttribute("selected")) {
@@ -31,7 +31,7 @@ document.getElementById("alcoholAmount").innerHTML = "";
         }
     }
 
-    let selectNonAlcohol = document.getElementById("selectNonAlcohol");
+    let selectNonAlcohol = document.getElementById("nieuweSelectNonAlcohol");
     for (let i = 0; i < selectNonAlcohol.children.length; i++) {
         let child = selectNonAlcohol.children.item(i);
         if (child.hasAttribute("selected")) {

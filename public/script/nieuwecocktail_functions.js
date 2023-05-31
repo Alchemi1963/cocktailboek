@@ -6,7 +6,7 @@ function selectEasy(el) {
 
         if (el.parentNode.name === "nieuweSelectAlcohol" || el.parentNode.name === "nieuweSelectNonAlcohol") {
 
-            let type = el.parentNode.name.replace("select", "");
+            let type = el.parentNode.name.replace("nieuweSelect", "");
             type = type.charAt(0).toLowerCase() + type.slice(1);
 
             let xAmount = document.getElementById(type + "Amount");
