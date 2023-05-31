@@ -8,6 +8,7 @@ function selectEasy(el) {
 
             let type = el.parentNode.name.replace("nieuweSelect", "");
             type = type.charAt(0).toLowerCase() + type.slice(1);
+            console.log(type);
 
             let xAmount = document.getElementById(type + "Amount");
 
