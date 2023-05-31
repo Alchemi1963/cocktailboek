@@ -4,12 +4,10 @@ function selectEasy(el) {
         if (el.hasAttribute('selected')) el.removeAttribute('selected');
         else el.setAttribute('selected', '');
 
-        console.log(el.parentNode.id);
         if (el.parentNode.id === "nieuweSelectAlcohol" || el.parentNode.id === "nieuweSelectNonAlcohol") {
 
             let type = el.parentNode.id.replace("nieuweSelect", "");
             type = type.charAt(0).toLowerCase() + type.slice(1);
-            console.log(type);
 
             let xAmount = document.getElementById(type + "Amount");
 

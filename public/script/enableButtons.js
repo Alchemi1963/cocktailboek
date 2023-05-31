@@ -8,7 +8,6 @@ function enableButton(elementId, eventType, listener, antiLocations) {
 enableButton("nieuweSelectAlcohol", "mousedown", (e) => {
 	if (e.target.tagName.toLowerCase() === "option") {
 		selectEasy(e.target);
-		console.log("YO");
 		e.preventDefault();
 	}
 });
@@ -54,8 +53,6 @@ enableButton("randomCocktail", "click", function(){
 });
 
 enableButton("search", "keyup", function(){
-
-	console.log("YO MOMA");
 	searchCocktail(returnSelected());
 }, ["/admin/alcohol", "/admin/nonalcohol"]);
 
