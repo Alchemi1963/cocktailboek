@@ -29,7 +29,7 @@ function parseForm(data) {
 	let alcohol = {};
 	let nonAlcohol = {};
 
-	// console.log(data);
+	console.log(data);
 
 	if (data.header.selectAlcohol !== undefined && typeof data.header.selectAlcohol != "string") {
 		for (let item in data.selectAlcohol) {
