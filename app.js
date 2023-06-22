@@ -122,6 +122,8 @@ app.get('/', (req, res) => {
 	if (checkLogin(req)) checkPerm(req);
 	if (debug){
 		res.setHeader('Content-Security-Policy', "default-src 'self' http:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com;");
+		res.cookie("bolk-oath-permission", "true");
+		res.cookie("bolk-oath-access-token", "true");
 	}
 	res.sendFile(path.join(__dirname, '/html/index.html'));
 });
@@ -152,9 +154,12 @@ app.post("/new", (req, res) => {
 
 app.get("/login", (req, res) => {
 	checkCreateSession(req);
+
 	if (debug){
-		res.setHeader('Content-Security-Policy', "default-src 'self' http:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com;");
+		res.redirect("/");
+		return;
 	}
+
 	if (req.query.code === undefined && req.query.error === undefined) {
 		console.log("Redirecting to https://auth.debolk.nl/authenticate?response_type=code&client_id=cocktailboek&redirect_uri=https://cocktails.debolk.nl/login&state=" + req.session.stateID)
 		res.redirect("https://auth.debolk.nl/authenticate?response_type=code&client_id=cocktailboek&redirect_uri=https://cocktails.debolk.nl/login&state=" + req.session.stateID);

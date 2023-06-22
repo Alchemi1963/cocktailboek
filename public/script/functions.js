@@ -194,6 +194,9 @@ function printToWebpage(cocktails){
 	}
 }
 
+console.log(getCookie("bolk-oath-permission"));
+console.log(getCookie("bolk-oath-access-token"));
+
 function backToAll(){
 	document.getElementById('backToAll').style.display = "none";
 
@@ -208,8 +211,6 @@ function backToAll(){
 		let new_cock = document.getElementById("new");
 		new_cock.style.display = "initial";
 
-		//test management
-		//https://login.i.bolkhuis.nl/ictcom/?access_token=example-access-token response should be 200 OK
 		if (getCookie("bolk-oath-permission") != null) {
 			let admin = document.getElementById("admin");
 			admin.style.display = "inherit";
@@ -285,11 +286,11 @@ function getCookie(name) {
     else
     {
         begin += 2;
-        var end = document.cookie.indexOf(";", begin);
-        if (end === -1) {
-        end = dc.length;
-        }
     }
+	var end = document.cookie.indexOf(";", begin);
+	if (end === -1) {
+		end = dc.length;
+	}
     // because unescape has been deprecated, replaced with decodeURI
     //return unescape(dc.substring(begin + prefix.length, end));
     return decodeURI(dc.substring(begin + prefix.length, end));
