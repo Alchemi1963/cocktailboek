@@ -18,6 +18,9 @@ enableButton("nieuweSelectNonAlcohol", "mousedown", (e) => {
 	}
 });
 
+enableButton("nieuweSelectAlcohol", "change", updateSelectQuantity);
+enableButton("nieuweSelectNonAlcohol", "change", updateSelectQuantity);
+
 enableButton("reset", "click", function() {
 document.getElementById("alcoholAmount").innerHTML = "";
     document.getElementById("nonAlcoholAmount").innerHTML = "";
