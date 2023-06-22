@@ -11,7 +11,9 @@ const {readFileSync} = require("fs");
 const {removeDrink, editDrink, addDrink} = require("./script/drank");
 const {Cocktail, removeCocktail} = require("./script/cocktails");
 
-const client_secret = readFileSync("./client_secret", "utf-8").trimEnd();
+const debug = process.argv.includes("debug");
+
+const client_secret = debug ? "DEBUGCLIENTSECRET" : readFileSync("./client_secret", "utf-8").trimEnd();
 
 const prismPOST = {
 	hostname: "login.i.bolkhuis.nl",
@@ -102,10 +104,16 @@ function checkCreateSession(req) {
 }
 
 function checkLogin(req) {
+	if (debug) {
+		return true;
+	}
 	return req.cookies["bolk-oath-access-token"] !== undefined;
 }
 
 function checkPerm(req) {
+	if (debug) {
+		return true;
+	}
 	return req.cookies["bolk-oath-permission"] !== undefined;
 }
 
@@ -207,13 +215,6 @@ app.get("/login", (req, res) => {
 			}));
 			post.end();
 			console.log("Attempting to retrieve access token...");
-			// console.log(JSON.stringify({
-			// 	grant_type: "authorization_code",
-			// 	redirect_uri: "https://cocktails.debolk.nl/login",
-			// 	code: req.query.code,
-			// 	client_id: "cocktailboek",
-			// 	client_secret: client_secret
-			// }));
 
 		}
 	}

@@ -130,7 +130,14 @@ function printToPage(database) {
 		div.appendChild(butDiv);
 		document.getElementById('content').appendChild(div);
 	}
+}
 
+function render(database){
+	if (document.location.pathname.includes("cocktails")) {
+		printToWebpage(database);
+	} else{
+		printToPage(database);
+	}
 }
 
 function addNew() {
@@ -221,37 +228,37 @@ function addNew() {
 function search(array){
 	let input = document.getElementById('search').value.toString().toLowerCase();
 	let searchedArray = array.filter(element => element.name.toString().toLowerCase().includes(input))
-	printToPage(searchedArray);
+	render(searchedArray);
 }
 
 function sortAlpha(database) {
 	const sort = database.sort();
-	printToPage(sort);
+	render(sort);
 }
 function sortByPriceLH(database){
 	const sort = database.sort((a,b) => (a.price - b.price));
-	printToPage(sort);
+	render(sort);
 }
 function sortByPrice(database){
 	const sort = database.sort((a,b) => (b.price - a.price));
-	printToPage(sort);
+	render(sort);
 }
 function sortByAlcLH(database){
 	const sort = database.sort((a,b) => (a.alcPer - b.alcPer));
-	printToPage(sort);
+	render(sort);
 }
 function sortByAlc(database){
 	const sort = database.sort((a,b) => (b.alcPer - a.alcPer));
-	printToPage(sort);
+	render(sort);
 }
 
 function sortByVolLH(database) {
 	const sort = database.sort((a,b) => (a.vol - b.vol));
-	printToPage(sort);
+	render(sort);
 }
 function sortByVol(database) {
 	const sort = database.sort((a,b) => (b.vol - a.vol));
-	printToPage(sort);
+	render(sort);
 }
 
 if (location.pathname.includes("/admin/cocktails/edit")) {
