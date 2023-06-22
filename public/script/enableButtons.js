@@ -85,7 +85,13 @@ enableButton("backToAll", "click", backToAll);
 if (location.pathname.includes("admin")) {
 	let db = [];
 
-	if (location.pathname.includes("nonalcohol")) {
+	if (location.pathname.includes("cocktails")) {
+		for (let item in cocktailDB){
+			item = cocktailDB[item];
+			db.push(item);
+		}
+
+	} else if (location.pathname.includes("nonalcohol")) {
 		for (let item in nonAlcoholDB){
 			item = nonAlcoholDB[item];
 			db.push(item);
