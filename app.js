@@ -120,11 +120,17 @@ function checkPerm(req) {
 app.get('/', (req, res) => {
 	checkCreateSession(req);
 	if (checkLogin(req)) checkPerm(req);
+	if (debug){
+		res.setHeader('Content-Security-Policy', "default-src 'self' http:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com;");
+	}
 	res.sendFile(path.join(__dirname, '/html/index.html'));
 });
 
 app.get('/new', (req, res) => {
 	checkCreateSession(req);
+	if (debug){
+		res.setHeader('Content-Security-Policy', "default-src 'self' http:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com;");
+	}
 	if (checkLogin(req)) {
 		checkPerm(req);
 		res.sendFile(path.join(__dirname, '/html/new.html'));
@@ -146,6 +152,9 @@ app.post("/new", (req, res) => {
 
 app.get("/login", (req, res) => {
 	checkCreateSession(req);
+	if (debug){
+		res.setHeader('Content-Security-Policy', "default-src 'self' http:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com;");
+	}
 	if (req.query.code === undefined && req.query.error === undefined) {
 		console.log("Redirecting to https://auth.debolk.nl/authenticate?response_type=code&client_id=cocktailboek&redirect_uri=https://cocktails.debolk.nl/login&state=" + req.session.stateID)
 		res.redirect("https://auth.debolk.nl/authenticate?response_type=code&client_id=cocktailboek&redirect_uri=https://cocktails.debolk.nl/login&state=" + req.session.stateID);
@@ -221,6 +230,9 @@ app.get("/login", (req, res) => {
 });
 app.get("/logout", (req, res) => {
 	console.log("Logged out " + req.session.user);
+	if (debug){
+		res.setHeader('Content-Security-Policy', "default-src 'self' http:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com;");
+	}
 	res.clearCookie("bolk-oath-access-token");
 	res.clearCookie("bolk-oath-permission");
 	res.redirect("/");
@@ -228,6 +240,9 @@ app.get("/logout", (req, res) => {
 
 app.get("/admin/cocktails", (req, res) => {
 	checkCreateSession(req);
+	if (debug){
+		res.setHeader('Content-Security-Policy', "default-src 'self' http:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com;");
+	}
 	if (checkLogin(req) && checkPerm(req)) {
 		res.sendFile(path.join(__dirname, '/html/admin/cocktails.html'));
 	} else {
@@ -248,6 +263,9 @@ app.put("/admin/cocktails", (req, res) => {
 
 app.get("/admin/cocktails/edit", (req, res) => {
 	checkCreateSession(req);
+	if (debug){
+		res.setHeader('Content-Security-Policy', "default-src 'self' http:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com;");
+	}
 	if (checkLogin(req) && checkPerm(req)) {
 		res.sendFile(path.join(__dirname, '/html/admin/editCocktail.html'));
 	} else {
@@ -270,6 +288,9 @@ app.post("/admin/cocktails/edit", (req, res) => {
 
 app.get("/admin/alcohol", (req, res) => {
 	checkCreateSession(req);
+	if (debug){
+		res.setHeader('Content-Security-Policy', "default-src 'self' http:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com;");
+	}
 	if (checkLogin(req) && checkPerm(req)) {
 		res.sendFile(path.join(__dirname, '/html/admin/alcohol.html'));
 	} else {
@@ -296,6 +317,9 @@ app.put("/admin/alcohol", (req, res) => {
 
 app.get("/admin/nonalcohol", (req, res) => {
 	checkCreateSession(req);
+	if (debug){
+		res.setHeader('Content-Security-Policy', "default-src 'self' http:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com;");
+	}
 	if (checkLogin(req) && checkPerm(req)) {
 		res.sendFile(path.join(__dirname, '/html/admin/nonalcohol.html'));
 	} else {
