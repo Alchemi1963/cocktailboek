@@ -21,9 +21,10 @@ function updateSelectQuantity(e) {
 
         for (let i = 0; i < e.target.childElementCount; i++) {
 
-            let ele = e.target.children.item(i);
-            let child = document.getElementById(ele.innerHTML.replaceAll(" ", "_"));
-            if (ele.hasAttribute('selected') && child === null) {
+            let element = e.target.children.item(i);
+            let child = document.getElementById(element.innerHTML.replaceAll(" ", "_"));
+
+            if (element.selected && child === null) {
 
                 let div = document.createElement("div");
                 let label = document.createElement("label");
@@ -36,15 +37,15 @@ function updateSelectQuantity(e) {
                 input.type = "number";
                 input.step = "any";
                 input.className = "hoeveelheid";
-                input.name = "selectN" + ele.value.replaceAll(" ", "_");
-                input.id = "selectN" + ele.value.replaceAll(" ", "_");
+                input.name = "selectN" + element.value.replaceAll(" ", "_");
+                input.id = "selectN" + element.value.replaceAll(" ", "_");
                 input.required = true;
-                label.innerHTML = ele.innerHTML;
+                label.innerHTML = element.innerHTML;
                 label.style.marginLeft = '1%';
                 label.style.maxWidth = "35%";
                 label.style.textAlign = "left";
-                select.name = "selectType" + ele.value.replaceAll(" ", "_");
-                select.id = "selectType" + ele.value.replaceAll(" ", "_");
+                select.name = "selectType" + element.value.replaceAll(" ", "_");
+                select.id = "selectType" + element.value.replaceAll(" ", "_");
                 select.className = "hoeveelheid";
                 select.onchange = function() {
                     if (select.item(select.selectedIndex) === aanvullen) {
@@ -76,12 +77,12 @@ function updateSelectQuantity(e) {
                 div.appendChild(input);
                 div.appendChild(document.createElement("br"))
                 div.appendChild(document.createElement("br"))
-                div.id = ele.innerHTML.replaceAll(" ", "_");
+                div.id = element.innerHTML.replaceAll(" ", "_");
 
                 xAmount.appendChild(div);
                 if (xAmount.style.display === "none") xAmount.style.display = "initial";
 
-            } else if (child != null && !ele.hasAttribute("selected")) {
+            } else if (child != null && !element.selected) {
                 xAmount.removeChild(child);
                 if (xAmount.childElementCount <= 3) xAmount.style.display = "none";
             }

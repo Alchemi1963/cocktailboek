@@ -194,9 +194,6 @@ function printToWebpage(cocktails){
 	}
 }
 
-console.log(getCookie("bolk-oath-permission"));
-console.log(getCookie("bolk-oath-access-token"));
-
 function backToAll(){
 	document.getElementById('backToAll').style.display = "none";
 
