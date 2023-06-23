@@ -10,6 +10,28 @@ function selectEasy(el) {
     return false;
 }
 
+function filterDrink(type, input) {
+    let database;
+    let element;
+    if (type === "alcohol") {
+        database = alcoholDB;
+        element = document.getElementById("nieuweSelectAlcohol");
+    } else if (type === "nonalcohol") {
+        database = nonAlcoholDB;
+        element = document.getElementById("nieuweSelectNonAlcohol");
+    }
+    let searchedArray = Object.values(database).filter(element => element.name.toString().toLowerCase().includes(input))
+    element.innerHTML = "";
+
+    for (let key in searchedArray) {
+        let opt = document.createElement('option');
+        opt.value = key;
+        opt.innerHTML = searchedArray[key].name
+        element.appendChild(opt);
+    }
+
+}
+
 function updateSelectQuantity(e) {
 
     if (e.target.id === "nieuweSelectAlcohol" || e.target.id === "nieuweSelectNonAlcohol") {

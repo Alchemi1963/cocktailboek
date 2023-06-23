@@ -18,11 +18,11 @@ enableButton("nieuweSelectNonAlcohol", "mousedown", (e) => {
 	}
 });
 
-enableButton("selectAlcoholSearch", "keydown", (e) => {
+enableButton("selectAlcoholSearch", "keyup", (e) => {
 	filterDrink("alcohol", e.target.value.toLowerCase());
 });
 
-enableButton("selectNonAlcoholSearch", "keydown", (e) => {
+enableButton("selectNonAlcoholSearch", "keyup", (e) => {
 	filterDrink("nonalcohol", e.target.value.toLowerCase());
 });
 
