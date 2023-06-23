@@ -18,6 +18,14 @@ enableButton("nieuweSelectNonAlcohol", "mousedown", (e) => {
 	}
 });
 
+enableButton("selectAlcoholSearch", "keydown", (e) => {
+	filterDrink("alcohol", e.target.value.toLowerCase());
+});
+
+enableButton("selectNonAlcoholSearch", "keydown", (e) => {
+	filterDrink("nonalcohol", e.target.value.toLowerCase());
+});
+
 enableButton("nieuweSelectAlcohol", "change", (e) => {
 	updateSelectQuantity(e);
 });
@@ -148,7 +156,7 @@ if (location.pathname.includes("admin")) {
 
 enableButton("hamburger", "click", function() {
 	let bar = document.getElementById("topnav");
-	if (bar.style.display !== "none"){
+	if (bar.style.display !== "none" && bar.style.display !== ""){
 		bar.style.display = "none";
 	} else {
 		bar.style.display = "inline-block";
