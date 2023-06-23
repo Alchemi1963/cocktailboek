@@ -108,7 +108,6 @@ class Cocktail {
 
 		this.creator = creator;
 		this.desc = desc;
-		console.log(typeof extras);
 		this.extras = extras;
 		cocktailDB[getId(this.name)] = this;
 	}
@@ -161,7 +160,7 @@ class Cocktail {
 
 			usedVolume += vol;
 			alcCont += alcoholItem.alcPer/100 * vol;
-			price += alcoholItem.price * (vol / alcoholItem.vol).toFixed(1);
+			price += alcoholItem.price * (vol / alcoholItem.vol).toFixed(2);
 		}
 		for (let key in this.nonAlcohol) {
 			let nonAlcoholItem = nonAlcoholDB[getId(key)];
@@ -180,7 +179,7 @@ class Cocktail {
 				vol = this.nonAlcohol[key][0] * volShotglas;
 			}
 			usedVolume += vol;
-			price += nonAlcoholItem.price * (vol / nonAlcoholItem.vol).toFixed(1);
+			price += nonAlcoholItem.price * (vol / nonAlcoholItem.vol).toFixed(2);
 		}
 		let useVol;
 		if (fill.length > 0) {
@@ -191,9 +190,9 @@ class Cocktail {
 
 			if ("alcPer" in fill[item][0]) {
 				alcCont += fill[item][0].alcPer/100 * useVol;
-				this.alcohol[getId(fill[item][0].name)] = [(useVol/fill[item][0].vol).toFixed(1), "aanvullen"];
+				this.alcohol[getId(fill[item][0].name)] = [(useVol/fill[item][0].vol).toFixed(2), "aanvullen"];
 			} else {
-				this.nonAlcohol[getId(fill[item][0].name)] = [(useVol/fill[item][0].vol).toFixed(1), "aanvullen"];
+				this.nonAlcohol[getId(fill[item][0].name)] = [(useVol/fill[item][0].vol).toFixed(2), "aanvullen"];
 			}
 			usedVolume += useVol;
 		}

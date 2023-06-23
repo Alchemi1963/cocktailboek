@@ -108,7 +108,7 @@ app.use(session({
 }));
 app.use(helmet());
 
-//refreshDatabase();
+refreshDatabase();
 // databaseWriter("alcohol");
 // databaseWriter("nonAlcohol");
 
