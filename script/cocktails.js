@@ -27,7 +27,8 @@ function refreshDatabase() {
 	for (let name in cocktailDB) {
 		try{
 			let cock = cocktailDB[name];
-			let temp = Cocktail.create(cock.name, cock.glass.toLowerCase(), cock.alcohol, cock.nonAlcohol, cock.creator, cock.desc, false);
+			if (cock.extras === undefined) cock.extras = null;
+			let temp = Cocktail.create(cock.name, cock.glass.toLowerCase(), cock.alcohol, cock.nonAlcohol, cock.creator, cock.desc, cock.extras, false);
 			delete cocktailDB[name];
 			cocktailDB[getId(name)] = temp;
 		} catch (e) {
@@ -91,7 +92,8 @@ class Cocktail {
 	nonAlcohol;
 	alcPer;
 	price;
-	constructor(name, glass, alcohol, nonAlcohol, alcPer, price, creator, desc){
+	extras;
+	constructor(name, glass, alcohol, nonAlcohol, alcPer, price, creator, desc, extras){
 		this.name = name;
 		this.glass = glass;
 		this.alcohol = alcohol;
@@ -106,6 +108,8 @@ class Cocktail {
 
 		this.creator = creator;
 		this.desc = desc;
+		console.log(typeof extras);
+		this.extras = extras;
 		cocktailDB[getId(this.name)] = this;
 	}
 
@@ -157,7 +161,7 @@ class Cocktail {
 
 			usedVolume += vol;
 			alcCont += alcoholItem.alcPer/100 * vol;
-			price += alcoholItem.price * vol / alcoholItem.vol;
+			price += alcoholItem.price * (vol / alcoholItem.vol).toFixed(1);
 		}
 		for (let key in this.nonAlcohol) {
 			let nonAlcoholItem = nonAlcoholDB[getId(key)];
@@ -176,7 +180,7 @@ class Cocktail {
 				vol = this.nonAlcohol[key][0] * volShotglas;
 			}
 			usedVolume += vol;
-			price += nonAlcoholItem.price * vol / nonAlcoholItem.vol;
+			price += nonAlcoholItem.price * (vol / nonAlcoholItem.vol).toFixed(1);
 		}
 		let useVol;
 		if (fill.length > 0) {
@@ -193,13 +197,20 @@ class Cocktail {
 			}
 			usedVolume += useVol;
 		}
-		this.alcPer = (alcCont/glassVolume * 100).toFixed(2);
+		this.alcPer = (alcCont/usedVolume * 100).toFixed(2);
+
+		for (let item in this.extras) {
+			price += item[1];
+		}
 		this.price = price.toFixed(2);
 
 	}
 
-	static create(name, glass, alcohol, nonAlcohol, creator, desc, write = true) {
-		let c = new Cocktail(name, glass, alcohol, nonAlcohol, null, null, creator, desc);
+	static create(name, glass, alcohol, nonAlcohol, creator, desc, extras, write = true) {
+		if (cocktailDB[getId(name)] !== undefined && write === true) {
+			return false;
+		}
+		let c = new Cocktail(name, glass, alcohol, nonAlcohol, null, null, creator, desc, extras);
 		if (write) databaseWriter(cocktailDB);
 		return c;
 	}

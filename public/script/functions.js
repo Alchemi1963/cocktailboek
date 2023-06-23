@@ -77,11 +77,11 @@ function printCocktail(cocktail){
 			let drank = fill[item];
 			item = parseInt(item);
 			if (item === 0){
-				fillList.innerHTML += "{} <a class='fill_hid'>(reken {}x af)</a>".format(drank[0].name, drank[1][0]);
+				fillList.innerHTML += "{} <a class='fill_hid' style='display: none'>(reken {}x af)</a>".format(drank[0].name, drank[1][0]);
 			} else if (item > 1 && item < fill.length - 1) {
-				fillList.innerHTML += ", {} <a class='fill_hid'>(reken {}x af)</a>".format(drank[0].name, drank[1][0]);
+				fillList.innerHTML += ", {} <a class='fill_hid' style='display: none'>(reken {}x af)</a>".format(drank[0].name, drank[1][0]);
 			} else {
-				fillList.innerHTML += " & {} <a class='fill_hid'>(reken {}x af)</a>".format(drank[0].name, drank[1][0]);
+				fillList.innerHTML += " & {} <a class='fill_hid' style='display: none'>(reken {}x af)</a>".format(drank[0].name, drank[1][0]);
 			}
 		}
 		div.appendChild(fillList);
@@ -101,6 +101,24 @@ function printCocktail(cocktail){
 				}
 			}
 		}
+	}
+
+	//zet de extraatjes erbij als het kan
+	if (cocktail.extras != null) {
+		let extras = document.createElement("p");
+		extras.innerHTML = "Voeg "
+		for (let i in cocktail.extras) {
+			let item = cocktail.extras[i];
+			if (i == cocktail.extras.length - 1 && cocktail.extras.length != 1) {
+				extras.innerHTML = extras.innerHTML.substring(0, extras.innerHTML.length-2);
+				extras.innerHTML += " en " + item[0] + " toe.";
+			} else if (cocktail.extras.length != 1) {
+				extras.innerHTML += item[0] + ", ";
+			} else {
+				extras.innerHTML += item[0] + " toe.";
+			}
+		}
+		div.appendChild(extras);
 	}
 
 	//Zet de omschrijving er bij als hij die heeft

@@ -35,6 +35,12 @@ fieldset{
 	float: right;
 }
 
+#addExtra{
+	float: right;
+	font-size: inherit;
+	margin-bottom: 0px;
+}
+
 h3{
 	font-size: inherit;
 }
@@ -69,6 +75,33 @@ textarea{
 	padding: 0px;
 	border: 1px solid darkgray;
 }
+
+.extraNameLabel{
+	float: left;
+	margin-left: 20%;
+	margin-top: 2px;
+}
+
+.extraName{
+	max-width: 30%;
+	margin-left: 4px;
+	float: left;
+	margin-top: 2px;
+}
+
+.extraPriceLabel{
+	float: right;
+	margin-right: 20%;
+	margin-top: 2px;
+}
+
+.extraPrice{
+	max-width: 10%;
+	margin-left: 4px;
+	float: right;
+	margin-top: 2px;
+}
+
 
 /* Desktop Scherm*/
 @media screen and (min-width: 1000px){
@@ -194,5 +227,27 @@ textarea{
 
 	#selectNonAlcoholSearch {
 		display: none;
+	}
+
+	.extraNameLabel{
+		float: left;
+		margin-left: 10%;
+	}
+
+	.extraName{
+		max-width: 30%;
+		margin-left: 4px;
+		float: left;
+	}
+
+	.extraPriceLabel{
+		float: right;
+		margin-right: 10%;
+	}
+
+	.extraPrice{
+		max-width: 20%;
+		margin-left: 4px;
+		float: right;
 	}
 }

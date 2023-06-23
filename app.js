@@ -9,7 +9,7 @@ const {readFileSync} = require("fs");
 
 //laad cocktails
 const {removeDrink, editDrink, addDrink} = require("./script/drank");
-const {Cocktail, removeCocktail} = require("./script/cocktails");
+const {Cocktail, removeCocktail, refreshDatabase} = require("./script/cocktails");
 
 const debug = process.argv.includes("debug");
 
@@ -32,6 +32,8 @@ function parseForm(data) {
 	let nonAlcohol = {};
 
 	console.log(data);
+
+	let extras = [];
 
 	if (data.selectAlcohol !== undefined && typeof data.selectAlcohol != "string") {
 		for (let item in data.selectAlcohol) {
@@ -77,7 +79,21 @@ function parseForm(data) {
 	if (data.desc === "") {
 		data.desc = null;
 	}
-	Cocktail.create(data.name, data.selectGlass, alcohol, nonAlcohol, data.creator, data.desc);
+
+	let i = 0
+	while (data.hasOwnProperty("extraName" + i.toString())) {
+		let name = data["extraName" + i.toString()];
+		let price = data["extraPrice" + i.toString()];
+		if (name !== "" && price !== "") extras.push([name, price]);
+		i++;
+	}
+	if (extras.length == 0) {
+		extras = null;
+	}
+
+	let result = Cocktail.create(data.name, data.selectGlass, alcohol, nonAlcohol, data.creator, data.desc, extras);
+	console.log("Result: " + result);
+	return result;
 }
 
 //start server
@@ -92,7 +108,7 @@ app.use(session({
 }));
 app.use(helmet());
 
-// refreshDatabase();
+refreshDatabase();
 // databaseWriter("alcohol");
 // databaseWriter("nonAlcohol");
 
@@ -146,8 +162,11 @@ app.post("/new", (req, res) => {
 	if (checkLogin(req)) {
 		checkPerm(req);
 		const data = req.body;
-		parseForm(data);
-		res.redirect("/");
+		let rest = parseForm(data);
+		console.log(!rest);
+		if (!rest) {
+			res.sendFile(path.join(__dirname, "/html/error400.html"));
+		} else res.redirect("/");
 	}
 
 });
@@ -284,8 +303,9 @@ app.post("/admin/cocktails/edit", (req, res) => {
 
 		const data = req.body;
 		removeCocktail(req.query.cocktail);
-		parseForm(data);
-		res.redirect("/admin/cocktails");
+		if (!parseForm(data)){
+			res.sendStatus(400);
+		}else res.redirect("/admin/cocktails");
 	} else {
 		res.redirect("/login")
 	}
