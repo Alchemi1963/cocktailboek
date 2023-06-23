@@ -272,12 +272,12 @@ if (location.pathname.includes("/admin/cocktails/edit")) {
 		document.getElementById("desc").value = cocktail.desc;
 		document.getElementById("creator").value = cocktail.creator;
 
-		let selAlc = document.getElementById("selectAlcohol");
+		let selAlc = document.getElementById("nieuweSelectAlcohol");
 		for (let i in selAlc.children) {
 			let option = selAlc.children[i];
 			if (option.value in cocktail.alcohol){
 				option.selected = true;
-				selectEasy(option);
+				selAlc.dispatchEvent(new Event("change"));
 
 				let type = document.getElementById("selectType{}".format(getId(option.innerHTML)));
 				type.value = cocktail.alcohol[option.value][1];
@@ -287,18 +287,18 @@ if (location.pathname.includes("/admin/cocktails/edit")) {
 				} else {
 					let input = document.getElementById("selectN{}".format(getId(option.innerHTML)));
 					type.style.width = "60%";
-                    input.style.display = "none";
+					input.style.display = "none";
 					input.required = false;
 				}
 			}
 		}
 
-		let selNonAlc = document.getElementById("selectNonAlcohol");
+		let selNonAlc = document.getElementById("nieuweSelectNonAlcohol");
 		for (let i in selNonAlc.children) {
 			let option = selNonAlc.children[i];
 			if (option.value in cocktail.nonAlcohol){
 				option.selected = true;
-				selectEasy(option);
+				selNonAlc.dispatchEvent(new Event("change"));
 
 				let type = document.getElementById("selectType{}".format(getId(option.innerHTML)));
 				type.value = cocktail.nonAlcohol[option.value][1];
@@ -308,9 +308,20 @@ if (location.pathname.includes("/admin/cocktails/edit")) {
 				} else {
 					let input = document.getElementById("selectN{}".format(getId(option.innerHTML)));
 					type.style.width = "60%";
-                    input.style.display = "none";
+					input.style.display = "none";
 					input.required = false;
 				}
+			}
+		}
+
+		if (cocktail.extras !== null) {
+			let extras = document.getElementById("extraStuff");
+			for (let i in cocktail.extras) {
+				let item = cocktail.extras[i];
+
+				generateExtra(extras);
+				document.getElementById("extraName" + i.toString()).value = item[0];
+				document.getElementById("extraPrice" + i.toString()).value = parseFloat(item[1]);
 			}
 		}
 	} else {

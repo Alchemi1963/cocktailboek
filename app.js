@@ -9,7 +9,7 @@ const {readFileSync} = require("fs");
 
 //laad cocktails
 const {removeDrink, editDrink, addDrink} = require("./script/drank");
-const {Cocktail, removeCocktail, refreshDatabase} = require("./script/cocktails");
+const {Cocktail, removeCocktail, refreshDatabase, cocktailDB} = require("./script/cocktails");
 
 const debug = process.argv.includes("debug");
 
@@ -90,7 +90,6 @@ function parseForm(data) {
 	if (extras.length == 0) {
 		extras = null;
 	}
-
 	let result = Cocktail.create(data.name, data.selectGlass, alcohol, nonAlcohol, data.creator, data.desc, extras);
 	console.log("Result: " + result);
 	return result;
@@ -300,10 +299,11 @@ app.post("/admin/cocktails/edit", (req, res) => {
 	if (checkLogin(req) && checkPerm(req)) {
 
 		const data = req.body;
-		removeCocktail(req.query.cocktail);
-		if (!parseForm(data)){
-			res.sendFile(path.join(__dirname, "/html/error400.html"));
-		}else res.redirect("/admin/cocktails");
+		console.log(data.name.toLowerCase().replace(/ /g, "_"));
+		removeCocktail(data.name.toLowerCase().replace(/ /g, "_"));
+
+		parseForm(data);
+		res.redirect("/admin/cocktails");
 	} else {
 		res.redirect("/login")
 	}

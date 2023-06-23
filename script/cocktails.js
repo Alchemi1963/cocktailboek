@@ -98,6 +98,7 @@ class Cocktail {
 		this.glass = glass;
 		this.alcohol = alcohol;
 		this.nonAlcohol = nonAlcohol;
+		this.extras = extras;
 
 		if (alcPer === null || price === null) {
 			this.calcAlcoholPrice();
@@ -108,7 +109,6 @@ class Cocktail {
 
 		this.creator = creator;
 		this.desc = desc;
-		this.extras = extras;
 		cocktailDB[getId(this.name)] = this;
 	}
 
@@ -199,10 +199,10 @@ class Cocktail {
 		this.alcPer = (alcCont/usedVolume * 100).toFixed(2);
 
 		for (let item in this.extras) {
-			price += item[1];
+			item = this.extras[item];
+			price += parseFloat(item[1]);
 		}
 		this.price = price.toFixed(2);
-
 	}
 
 	static create(name, glass, alcohol, nonAlcohol, creator, desc, extras, write = true) {

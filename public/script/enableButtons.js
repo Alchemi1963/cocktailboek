@@ -36,36 +36,8 @@ enableButton("nieuweSelectNonAlcohol", "change",  (e) => {
 
 enableButton("addExtra", "click", function(e) {
 	e.preventDefault();
-
 	let element = document.getElementById("extraStuff");
-	let id = element.childElementCount !== 0 ? element.childElementCount/4 : 0;
-
-	let extraNameLabel = document.createElement("label");
-	extraNameLabel.innerHTML = "Item:";
-	extraNameLabel.className = "extraNameLabel";
-
-	let extraName = document.createElement("input");
-	extraName.name = "extraName" + id.toString();
-	extraName.id = extraName.name;
-	extraName.type = "text";
-	extraName.className = "extraName";
-	extraNameLabel.htmlFor = extraName.id;
-
-	let extraPriceLabel = document.createElement("label")
-	extraPriceLabel.innerHTML = "€";
-	extraPriceLabel.className = "extraPriceLabel";
-	let extraPrice = document.createElement("input");
-	extraPrice.name = "extraPrice" + id.toString();
-	extraPrice.id = extraName.name;
-	extraPrice.type = "number";
-	extraPrice.className = "extraPrice";
-	extraPrice.step = "0.05";
-	extraPrice.min = "0";
-	extraPrice.value = "0";
-	extraPrice.defaultValue = "0";
-	extraPriceLabel.htmlFor = extraPrice.id;
-
-	element.append(extraNameLabel, extraName, extraPriceLabel, extraPrice);
+	generateExtra(element);
 });
 
 enableButton("reset", "click", function() {
