@@ -262,7 +262,12 @@ function sortByVol(database) {
 }
 
 if (location.pathname.includes("/admin/cocktails/edit")) {
-	const cocktailID = new URLSearchParams(window.location.search).get('cocktail');
+	let search = new URLSearchParams(window.location.search);
+	const cocktailID = search.get('cocktail');
+
+	document.getElementById("cocktail").value = cocktailID;
+	document.getElementById("scroll").value = search.get("scroll");
+
 	if (cocktailID in cocktailDB) {
 		let cocktail = cocktailDB[cocktailID];
 		console.log(cocktail);
@@ -275,7 +280,7 @@ if (location.pathname.includes("/admin/cocktails/edit")) {
 		let selAlc = document.getElementById("nieuweSelectAlcohol");
 		for (let i in selAlc.children) {
 			let option = selAlc.children[i];
-			if (option.value in cocktail.alcohol){
+			if (cocktail.alcohol !== null > 0 && option.value in cocktail.alcohol){
 				option.selected = true;
 				selAlc.dispatchEvent(new Event("change"));
 
@@ -296,7 +301,7 @@ if (location.pathname.includes("/admin/cocktails/edit")) {
 		let selNonAlc = document.getElementById("nieuweSelectNonAlcohol");
 		for (let i in selNonAlc.children) {
 			let option = selNonAlc.children[i];
-			if (option.value in cocktail.nonAlcohol){
+			if (cocktail.nonAlcohol !== null && option.value in cocktail.nonAlcohol){
 				option.selected = true;
 				selNonAlc.dispatchEvent(new Event("change"));
 
@@ -325,6 +330,12 @@ if (location.pathname.includes("/admin/cocktails/edit")) {
 			}
 		}
 	} else {
-		location.href = "/admin/cocktails";
+		location.href = "/admin/cocktails?scroll=" + document.getElementById("scroll").value;
+	}
+} else if (location.pathname.includes("/admin/cocktails")) {
+	let search = new URLSearchParams(window.location.search);
+
+	if (search.has("scroll")){
+		window.scrollTo(0, parseInt(search.get("scroll")));
 	}
 }
