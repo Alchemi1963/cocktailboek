@@ -111,3 +111,5 @@ function updateSelectQuantity(e) {
         }
     }
 }
+// updateSelectQuantity(document.getElementById("nieuweSelectAlcohol"));
+// updateSelectQuantity(document.getElementById("nieuweSelectNonAlcohol"));
