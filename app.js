@@ -299,11 +299,10 @@ app.post("/admin/cocktails/edit", (req, res) => {
 	if (checkLogin(req) && checkPerm(req)) {
 
 		const data = req.body;
-		console.log(data.name.toLowerCase().replace(/ /g, "_"));
-		removeCocktail(data.name.toLowerCase().replace(/ /g, "_"));
+		removeCocktail(data.cocktail);
 
 		parseForm(data);
-		res.redirect("/admin/cocktails");
+		res.redirect("/admin/cocktails?scroll=" + data.scroll);
 	} else {
 		res.redirect("/login")
 	}

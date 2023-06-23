@@ -151,7 +151,7 @@ function printCocktail(cocktail){
 		let edit = document.createElement("button");
 		edit.id = "edit";
 		edit.onclick = () => {
-			location.href = "/admin/cocktails/edit?cocktail=" + getId(cocktail.name);
+			location.href = "/admin/cocktails/edit?cocktail={}&scroll={}".format(getId(cocktail.name), window.scrollY || window.pageYOffset);
 		};
 		edit.innerHTML = "Edit"
 
@@ -164,7 +164,9 @@ function printCocktail(cocktail){
 				put.open("PUT", "/admin/cocktails?remove=" + getId(cocktail.name));
 				put.onreadystatechange = function() {
 					if (put.status === 200) {
+						let scroll = window.scrollY || window.pageYOffset;
 						location.reload();
+						window.scrollTo(0, scroll);
 					}
 				}
 				put.send();
