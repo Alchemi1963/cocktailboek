@@ -108,7 +108,7 @@ app.use(session({
 }));
 app.use(helmet());
 
-refreshDatabase();
+//refreshDatabase();
 // databaseWriter("alcohol");
 // databaseWriter("nonAlcohol");
 
@@ -162,9 +162,7 @@ app.post("/new", (req, res) => {
 	if (checkLogin(req)) {
 		checkPerm(req);
 		const data = req.body;
-		let rest = parseForm(data);
-		console.log(!rest);
-		if (!rest) {
+		if (!parseForm(data)) {
 			res.sendFile(path.join(__dirname, "/html/error400.html"));
 		} else res.redirect("/");
 	}
@@ -304,7 +302,7 @@ app.post("/admin/cocktails/edit", (req, res) => {
 		const data = req.body;
 		removeCocktail(req.query.cocktail);
 		if (!parseForm(data)){
-			res.sendStatus(400);
+			res.sendFile(path.join(__dirname, "/html/error400.html"));
 		}else res.redirect("/admin/cocktails");
 	} else {
 		res.redirect("/login")
