@@ -9,8 +9,9 @@
 }
 
 label {
-	float: left;
-	margin: 1% 0px 1% 5%;
+	left: 0%;
+	position: absolute;
+	margin: 2% 0px 2% 5%;
 	padding-top: 2px;
 	padding-bottom: 2px;
 	height: 15px;
@@ -18,20 +19,22 @@ label {
 
 
 .drink input{
-	float: right;
+	right: 0%;
+	position: absolute;
 	max-width: 50px;
-	margin: 1% 5% 1% 0px;
-	padding: 0px;
+	margin: 2% 5% 2% 0px;
+	padding-top: 2px;
+	padding-bottom: 2px;
 	height: 15px;
 }
 
 #name{
 	font-size: 1.17em;
 	font-weight: bold;
-	width: 50%;
-	max-width: 100%;
-	margin: 7.4% 0px 7.4% 0px !important;
-	padding: 0px;
+	width: 50% !important;
+	max-width: 100% !important;
+	margin: 1em 0px 0.5em 0px !important;
+	padding: 0px !important;
 	border: none;
 	transform: translateX(-50%);
 	text-align: center;

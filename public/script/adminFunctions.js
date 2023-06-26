@@ -39,9 +39,10 @@ function printToPage(database) {
 		let div = document.createElement("div");
 		div.className = "drink";
 
-		let name = document.createElement("h3");
-		name.innerHTML = drink.name;
-		div.appendChild(name);
+		let name = document.createElement("input");
+		name.id = "name";
+		name.value = drink.name;
+		div.append(name, document.createElement("br"), document.createElement("br"), document.createElement("br"));
 
 		const serveSize = document.createElement("input");
 		serveSize.value = drink.vol;
@@ -53,7 +54,7 @@ function printToPage(database) {
 		serveSizeLabel.innerHTML = "Serveer volume [mL]";
 		serveSizeLabel.htmlFor = serveSize.id;
 
-		div.append(serveSizeLabel, serveSize);
+		div.append(serveSizeLabel, serveSize, document.createElement("br"));
 
 		if ("alcPer" in drink) {
 			type = "alcohol";
@@ -67,7 +68,7 @@ function printToPage(database) {
 			alcPerLabel.innerHTML = "Alcohol gehalte [%]";
 			alcPerLabel.htmlFor = alcPer.id;
 
-			div.append(alcPerLabel, alcPer);
+			div.append(alcPerLabel, alcPer, document.createElement("br"));
 
 		} else{
 			type = "nonalcohol";
