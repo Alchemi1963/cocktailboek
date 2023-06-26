@@ -5,10 +5,12 @@ const helmet = require("helmet");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const https = require("https");
+const multer = require("multer");
+const XLSX = require("data-validation-xlsx");
 const {readFileSync} = require("fs");
 
 //laad cocktails
-const {removeDrink, editDrink, addDrink} = require("./script/drank");
+const {alcoholDB, nonAlcoholDB, removeDrink, editDrink, addDrink} = require("./script/drank");
 const {Cocktail, removeCocktail, refreshDatabase, cocktailDB} = require("./script/cocktails");
 
 const debug = process.argv.includes("debug");
@@ -107,6 +109,9 @@ app.use(session({
 }));
 app.use(helmet());
 
+const upload = multer({dest: "upload/"});
+const xlsxCols = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L"];
+
 //refreshDatabase();
 // databaseWriter("alcohol");
 // databaseWriter("nonAlcohol");
@@ -130,6 +135,17 @@ function checkPerm(req) {
 		return true;
 	}
 	return req.cookies["bolk-oath-permission"] !== undefined;
+}
+
+function clearCells(sheet, start, end) {
+	const range = XLSX.utils.decode_range(start + ":" + end);
+	for (let row = range.s.r; row <= range.e.r; row ++) {
+		for (let col = range.s.c; col <= range.e.c; col++){
+			const cellAddress = XLSX.utils.encode_cell({r: row, c: col});
+			sheet[cellAddress] = undefined;
+		}
+	}
+	return sheet;
 }
 
 app.get('/', (req, res) => {
@@ -364,6 +380,145 @@ app.put("/admin/nonalcohol", (req, res) => {
 		res.redirect("/login")
 	}
 
+});
+
+app.get("/admin/download", (req, res) => {
+	const filepath = path.join(__dirname, "/public/assets/template.xlsx");
+	//prepare workbook
+	const workbook = XLSX.readFile(filepath);
+	const alcoholSheet = workbook.Sheets["alcohol"];
+	const nonAlcoholSheet = workbook.Sheets["nonAlcohol"];
+	const cocktailSheet = workbook.Sheets["cocktails"];
+
+	console.log(cocktailSheet);
+
+	clearCells(alcoholSheet, "A2", "E102");
+	clearCells(nonAlcoholSheet, "A2", "D102");
+
+	alcoholSheet["!ref"] = "A1:E" + (Object.values(alcoholDB).length + 1).toString();
+	nonAlcoholSheet["!ref"] = "A1:E" + (Object.values(nonAlcoholDB).length + 1).toString();
+
+	let i = 2;
+	for (let key in alcoholDB) {
+		let alc = alcoholDB[key];
+
+		alcoholSheet["A" + i.toString()] = {t: "s", v: key};
+		alcoholSheet["B" + i.toString()] = {t: "s", v: alc.name};
+		alcoholSheet["C" + i.toString()] = {t: "n", v: alc.alcPer};
+		alcoholSheet["D" + i.toString()] = {t: "n", v: alc.price};
+		alcoholSheet["E" + i.toString()] = {t: "n", v: alc.vol};
+
+		i ++;
+	}
+
+	i = 2;
+	for (let key in nonAlcoholDB) {
+		let nonAlc = nonAlcoholDB[key];
+		nonAlcoholSheet["A" + i.toString()] = {t: "s", v: key};
+		nonAlcoholSheet["B" + i.toString()] = {t: "s", v: nonAlc.name};
+		nonAlcoholSheet["C" + i.toString()] = {t: "n", v: nonAlc.price};
+		nonAlcoholSheet["D" + i.toString()] = {t: "n", v: nonAlc.vol};
+
+		i ++;
+	}
+
+	cocktailSheet["!ref"] = "A1:L6401";
+
+	for (let i = 2; i <= 6401; i++){
+		cocktailSheet["B" + i.toString()] = { t: "s", v: ""};
+		cocktailSheet["C" + i.toString()] = { t: "s", v: ""};
+		cocktailSheet["D" + i.toString()] = { t: "n", v: ""};
+		cocktailSheet["E" + i.toString()] = { t: "s", v: ""};
+		cocktailSheet["F" + i.toString()] = { t: "s", v: ""};
+		cocktailSheet["G" + i.toString()] = { t: "n", v: ""};
+		cocktailSheet["H" + i.toString()] = { t: "s", v: ""};
+		cocktailSheet["J" + i.toString()] = { t: "n", v: ""};
+		cocktailSheet["B" + i.toString()].dataValidation = {type: "list", formula1: '"longdrink,tumbler,papa,pul,pitcher,shot"'};
+		cocktailSheet["C" + i.toString()].dataValidation = {type: "list", formula1: '"' + Object.keys(alcoholDB).join(",") + '"'};
+		cocktailSheet["D" + i.toString()].dataValidation = {type: "decimal", operator: "greaterThan", formula1: 0.0};
+		cocktailSheet["E" + i.toString()].dataValidation = {type: "list", formula1: '"shot,fles,scheutje,aanvullen"'};
+		cocktailSheet["F" + i.toString()].dataValidation = {type: "list", formula1: '"' + Object.keys(nonAlcoholDB).join(",") + '"'};
+		cocktailSheet["G" + i.toString()].dataValidation = {type: "decimal", operator: "greaterThan", formula1: 0.0};
+		cocktailSheet["H" + i.toString()].dataValidation = {type: "list", formula1: '"shot,fles,scheutje,aanvullen"'};
+		cocktailSheet["J" + i.toString()].dataValidation = {type: "decimal", operator: "greaterThanOrEqual", formula1: 0.0};
+		if (i === 3) console.log(cocktailSheet);
+	}
+
+
+	XLSX.writeFileXLSX(workbook, path.join(__dirname, "/public/assets/template.xlsx"));
+
+	res.setHeader("Content-Disposition", "attachment; filename=bulk_import.xlsx");
+	res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+	res.sendFile(filepath);
+});
+
+app.post("/admin/upload", upload.single("file"), (req, res) => {
+	const filepath = req.file.path;
+	const workbook = XLSX.readFile(filepath);
+	const sheet = workbook.Sheets["cocktails"];
+
+	let addDB = [];
+	let row = 2;
+	let index = -1;
+	let fails = [];
+
+	while (true) {
+		let emptyCount = 0;
+		for (let letter in xlsxCols) {
+			letter = xlsxCols[letter];
+			let cell = sheet[letter + row.toString()]
+			if (cell !== undefined) {
+				let v = cell.v;
+				if (letter === "A") {
+					addDB.push({name: v});
+					index ++;
+				} else if (letter === "B") addDB[index]["glass"] = v;
+				else if (letter === "C") {
+					if (addDB[index]["alcohol"] === undefined){
+						addDB[index]["alcohol"] = {};
+					}
+					addDB[index]["alcohol"][v] = [];
+				}
+				else if (letter === "D") addDB[index]["alcohol"][sheet["C" + row.toString()].v].push(v);
+				else if (letter === "E") addDB[index]["alcohol"][sheet["C" + row.toString()].v].push(v);
+				else if (letter === "F") {
+					if (addDB[index]["nonAlcohol"] === undefined){
+						addDB[index]["nonAlcohol"] = {};
+					}
+					addDB[index]["nonAlcohol"][v] = [];
+				}
+				else if (letter === "G") addDB[index]["nonAlcohol"][sheet["F" + row.toString()].v].push(v);
+				else if (letter === "H") addDB[index]["nonAlcohol"][sheet["F" + row.toString()].v].push(v);
+				else if (letter === "I") {
+					if (addDB[index]["extras"] === undefined) {
+						addDB[index]["extras"] = [];
+					}
+					addDB[index]["extras"].push([v]);
+				}
+				else if (letter === "J") addDB[index]["extras"][addDB[index]["extras"].length - 1].push(v);
+				else if (letter === "K") addDB[index]["creator"] = v;
+				else if (letter === "L") addDB[index]["desc"] = v;
+			}
+			else emptyCount ++;
+		}
+		if (emptyCount == 11) break; // stop when an entire row is empty
+		row ++;
+	}
+	for (let cock in addDB){
+		if (cock["alcohol"] === undefined) cock["alcohol"] = null;
+		if (cock["nonAlcohol"] === undefined) cock["nonAlcohol"] = null;
+		if (cock["extras"] === undefined) cock["extras"] = null;
+		if (cock["creator"] === undefined) cock["creator"] = null;
+		if (cock["desc"] === undefined) cock["desc"] = null;
+		cock = addDB[cock];
+		if (Cocktail.create(cock.name, cock.glass, cock.alcohol, cock.nonAlcohol, cock.creator, cock.desc, cock.extras)) {
+			console.log("Succesfully created " + cock.name);
+		} else {
+			console.log("Failed creating " + cock.name);
+			fails.push(cock.name);
+		}
+	}
+	res.sendStatus(200);
 });
 
 app.listen(3000)

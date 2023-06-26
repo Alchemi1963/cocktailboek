@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>TypeError: XLSX.writeFileXLSX is not a function<br> &nbsp; &nbsp;at /home/michael/GitHub/cocktailboek/app.js:448:7<br> &nbsp; &nbsp;at Layer.handle [as handle_request] (/home/michael/GitHub/cocktailboek/node_modules/express/lib/router/layer.js:95:5)<br> &nbsp; &nbsp;at next (/home/michael/GitHub/cocktailboek/node_modules/express/lib/router/route.js:144:13)<br> &nbsp; &nbsp;at Route.dispatch (/home/michael/GitHub/cocktailboek/node_modules/express/lib/router/route.js:114:3)<br> &nbsp; &nbsp;at Layer.handle [as handle_request] (/home/michael/GitHub/cocktailboek/node_modules/express/lib/router/layer.js:95:5)<br> &nbsp; &nbsp;at /home/michael/GitHub/cocktailboek/node_modules/express/lib/router/index.js:284:15<br> &nbsp; &nbsp;at Function.process_params (/home/michael/GitHub/cocktailboek/node_modules/express/lib/router/index.js:346:12)<br> &nbsp; &nbsp;at next (/home/michael/GitHub/cocktailboek/node_modules/express/lib/router/index.js:280:10)<br> &nbsp; &nbsp;at internalNext (/home/michael/GitHub/cocktailboek/node_modules/helmet/dist/cjs/index.js:451:6)<br> &nbsp; &nbsp;at xXssProtectionMiddleware (/home/michael/GitHub/cocktailboek/node_modules/helmet/dist/cjs/index.js:330:3)</pre>
+</body>
+</html>
