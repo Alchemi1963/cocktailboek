@@ -92,12 +92,12 @@ function removeDrink(name) {
 }
 
 function editDrink(json) {
-	if (getId(json.name) in alcoholDB) {
-		delete alcoholDB[json.name];
+	if (json.id in alcoholDB) {
+		delete alcoholDB[json.id];
 		alcohol(json.name, json.alcPer, json.price, json.vol);
 		databaseWriter("alcohol");
-	} else if (getId(json.name) in nonAlcoholDB) {
-		delete nonAlcoholDB[json.name];
+	} else if (json.id in nonAlcoholDB) {
+		delete nonAlcoholDB[json.id];
 		nonAlcohol(json.name, json.price, json.vol);
 		databaseWriter("nonAlcohol");
 	}

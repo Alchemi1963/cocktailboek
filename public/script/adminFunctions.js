@@ -1,3 +1,7 @@
+function br(){
+	return document.createElement("br");
+}
+
 function confirm(divId, callback) {
 	let div = document.getElementById(divId);
 	let content = document.getElementById("content");
@@ -42,7 +46,7 @@ function printToPage(database) {
 		let name = document.createElement("input");
 		name.id = "name";
 		name.value = drink.name;
-		div.append(name, document.createElement("br"), document.createElement("br"), document.createElement("br"));
+		div.append(name, br(), br(), br());
 
 		const serveSize = document.createElement("input");
 		serveSize.value = drink.vol;
@@ -54,7 +58,7 @@ function printToPage(database) {
 		serveSizeLabel.innerHTML = "Serveer volume [mL]";
 		serveSizeLabel.htmlFor = serveSize.id;
 
-		div.append(serveSizeLabel, serveSize, document.createElement("br"));
+		div.append(serveSizeLabel, serveSize, br());
 
 		if ("alcPer" in drink) {
 			type = "alcohol";
@@ -68,7 +72,7 @@ function printToPage(database) {
 			alcPerLabel.innerHTML = "Alcohol gehalte [%]";
 			alcPerLabel.htmlFor = alcPer.id;
 
-			div.append(alcPerLabel, alcPer, document.createElement("br"));
+			div.append(alcPerLabel, alcPer, br());
 
 		} else{
 			type = "nonalcohol";
@@ -93,7 +97,7 @@ function printToPage(database) {
 		edit.id = "edit";
 		edit.onclick = () => {
 			let put = new XMLHttpRequest();
-			let newDrink = {name: drink.name, price: price.value, vol: serveSize.value}
+			let newDrink = {id: getId(drink.name), name: drink.name, price: price.value, vol: serveSize.value}
 
 			if (type === "alcohol") {
 				newDrink["alcPer"] = alcPer.value;
@@ -156,7 +160,7 @@ function addNew() {
 	const name = document.createElement("input");
 	name.placeholder = "Naam";
 	name.id = "name";
-	div.append(name);
+	div.append(name, br(), br(), br());
 
 	const serveSize = document.createElement("input");
 	serveSize.value = 40;
@@ -168,7 +172,7 @@ function addNew() {
 	serveSizeLabel.innerHTML = "Serveer volume [mL]";
 	serveSizeLabel.htmlFor = serveSize.id;
 
-	div.append(serveSizeLabel, serveSize);
+	div.append(serveSizeLabel, serveSize, br());
 
 	const alcPer = document.createElement("input");
 	if (type === "alcohol") {
@@ -181,7 +185,7 @@ function addNew() {
 		alcPerLabel.innerHTML = "Alcohol percentage [%]";
 		alcPerLabel.htmlFor = alcPer.id;
 
-		div.append(alcPerLabel, alcPer);
+		div.append(alcPerLabel, alcPer, br());
 
 	}
 
@@ -204,7 +208,7 @@ function addNew() {
 	edit.id = "edit";
 	edit.onclick = () => {
 		let put = new XMLHttpRequest();
-		let newDrink = {name: name.value, price: price.value, vol: serveSize.value}
+		let newDrink = {id: getId(name.value), name: name.value, price: price.value, vol: serveSize.value}
 
 		if (type === "alcohol") {
 			newDrink["alcPer"] = alcPer.value;
