@@ -98,6 +98,18 @@ class Cocktail {
 		this.glass = glass;
 		this.alcohol = alcohol;
 		this.nonAlcohol = nonAlcohol;
+
+		let i = 0
+		for (let e of extras) {
+			if (typeof e !== "object") {
+				e = [e, 0];
+				extras[i] = e;
+			} else if (typeof e[1] !== "number") {
+				e[1] = 0;
+				extras[i] = e;
+			}
+			i++;
+		}
 		this.extras = extras;
 
 		if (alcPer === null || price === null) {
