@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <%- include("head.ejs") %>
+    <%- extraStyle %>
+</head>
+
+<body>
+<header id="header">
+    <%- include("header.ejs", {filter: true, location: location}) %>
+</header>
+
+<div id="content">
+</div>
+
+<div id="overlay"></div>
+
+<div id="removeConfirm" class="window">
+    <h1>Weet je het zeker?</h1>
+    <br>
+    <button id="yes" style="margin-right: 5%;">Ja</button>
+    <button id="no" style="margin-left: 5%;">Nee</button>
+</div>
+
+<%- scripts %>
+
+</body>
+</html>

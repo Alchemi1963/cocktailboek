@@ -1,42 +1,23 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="/styles/newcocktail.css" rel="stylesheet" type="text/css">
-    <link href="/styles/shared.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <meta charset="utf-8">
-    <title>Bolksche Cocktailboek</title>
-    <link rel="shortcut icon" href="/assets/bolkvis.png"/>
+    <%- include("head.ejs") %>
+    <link href="/styles/editor.css" rel="stylesheet" type="text/css">
 </head>
 
 <header id="header">
-    <ul id="navbar">
-        <a href="/" class="home" , style="display: none">Bolksch Cocktailboek</a>
-        <a id="hamburger" class="icon" style="display: none">
-            <i class="fa fa-bars"></i>
-        </a>
-        <div class="topnav" id="topnav">
-            <li><a href="/admin/cocktails" id="terug">Terug</a></li>
-            <li class="dropdown" id="admin">
-                <a>Admin</a>
-                <div class="dropdown-content">
-                    <a href="/admin/cocktails">Cocktails</a>
-                    <a href="/admin/alcohol">Alcohols</a>
-                    <a href="/admin/nonalcohol">Non Alcohols</a>
-                </div>
-            </li>
-        </div>
-    </ul>
+    <%- include("header.ejs", {filter: false}) %>
 </header>
 
 <body>
-<form action="/admin/cocktails/edit" method="POST">
+<form action="<%= location %>" method="POST">
     <input type="hidden" name="cocktail" id="cocktail">
     <input type="hidden" name="scroll" id="scroll">
     <fieldset>
+
         <div class="field">
-            <h3>Edit cocktail</h3>
+            <% if (location === "/new") { %> <h2>Nieuwe cocktail</h2> <% } %>
+            <% if (location === "/admin/cocktails/edit") { %> <h2>Edit cocktail</h2> <% } %>
         </div>
 
         <div class="field">
@@ -112,12 +93,7 @@
     </fieldset>
 </form>
 
-<script src="/script/getDrank.js"></script>
-<script src="/script/functions.js"></script>
-<script src="/script/getCocktails.js"></script>
-<script src="/script/nieuwecocktail_functions.js"></script>
-<script src="/script/enableButtons.js"></script>
-<script src="/script/adminFunctions.js"></script>
+<%- scripts %>
 
 </body>
 </html>

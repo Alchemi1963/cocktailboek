@@ -6,20 +6,19 @@
     <link href="/styles/shared.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta charset="utf-8">
-    <meta name="alles" content="yes">
-    <title>Bolksche Cocktailboek</title>
+    <title>Het Bolksch CocktailboeHet Bolksch Cocktailboek</title>
     <link rel="shortcut icon" href="/assets/bolkvis.png"/>
 </head>
 
 <body>
 <header id="header">
     <ul id="navbar">
-        <a href="/" class="home", style="display: none">Bolksch Cocktailboek</a>
+        <a href="/public" class="home" , style="display: none">Bolksch Cocktailboek</a>
         <a id="hamburger" class="icon" style="display: none">
             <i class="fa fa-bars"></i>
         </a>
         <div class="topnav" id="topnav">
-            <li id="home"><a href="/">Thuisch</a></li>
+            <li id="home"><a href="/public">Thuisch</a></li>
             <li id="randomCocktail"><a>Random Cocktail</a></li>
             <li id="backToAll" style="display: none"><a>Alle cocktails</a></li>
             <li id="login"><a href="/login">Log In</a></li>
@@ -37,8 +36,8 @@
     </ul>
 </header>
 
-<h1>Error 336 + 64 = 400</h1>
-<p1>De cocktail die je wilde toevoegen bestaat al, of er is eentje met dezelfde naam.</p1>
+<h1>Error <%= errorcode %></h1>
+<p1><%= message %></p1>
 
 
 <script src="/script/functions.js"></script>

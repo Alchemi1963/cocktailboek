@@ -1,0 +1,56 @@
+<ul id="navbar">
+    <a href="/" class="home" , style="display: none">Bolksch Cocktailboek</a>
+    <a id="hamburger" class="icon" style="display: none">
+        <i class="fa fa-bars"></i>
+    </a>
+    <div class="topnav" id="topnav">
+        <% if (location === "/") { %> <li id="randomCocktail"><a>Random Cocktail</a></li> <% } %>
+        <% if (location === "/") { %> <li id="backToAll" style="display: none"><a>Alle cocktails</a></li> <% } %>
+        <% if (location !== "/") { %> <li id="home"><a href="/">Thuisch</a></li> <% } %>
+        <% if (location === "/admin/cocktails/edit") { %> <li id="Terug"><a href="/admin/cocktails">Terug</a></li> <% } %>
+        <li id="login"><a href="/login">Log In</a></li>
+        <li id="logout" style="display:none"><a href="/logout">Log Out</a></li>
+        <% if (["/", "/admin/cocktails"].includes(location)) { %> <li id="new" style="display:none"><a href="/new">Nieuwe Cocktail</a></li> <% } %>
+        <% if (["/admin/alcohols", "/admin/nonalcohols"].includes(location)) { %> <li id="new"><a>Nieuwe Drank</a></li> <% } %>
+        <li class="dropdown" id="admin" style="display:none">
+            <a>Admin</a>
+            <div class="dropdown-content">
+                <% if (!["/admin/cocktails", "/admin/cocktails/edit"].includes(location)) { %> <a href="/admin/cocktails">Cocktails</a>  <% } %>
+                <% if (location !== "/admin/alcohols") { %> <a href="/admin/alcohols">Alcohols</a> <% } %>
+                <% if (location !== "/admin/nonalcohols") { %> <a href="/admin/nonalcohols">Non Alcohols</a> <% } %>
+            </div>
+        </li>
+
+        <% if (filter) { %>
+            <li class="filter">
+                <select id="sort">
+                    <option id="alphabet">Alfabetisch</option>
+                    <option id="lowhigh">Prijs laag -> hoog</option>
+                    <option id="highlow">Prijs hoog -> laag</option>
+                    <option id="alclowhigh">Alcohol laag -> hoog</option>
+                    <option id="alchighlow">Alcohol hoog -> laag</option>
+                </select>
+
+                <select id="selectGlass">
+                    <option selected="selected">Alle Glazen</option>
+                    <option id="selectLongdrink">Longdrink</option>
+                    <option id="selectTumbler">Tumbler</option>
+                    <option id="selectPapa">Papa</option>
+                    <option id="selectPul">Pul</option>
+                    <option id="selectPitcher">Pitcher</option>
+                    <option id="selectShot">Shot</option>
+                </select>
+
+                <select id="selectNonAlcohol">
+                    <option selected="selected">Alle Non Alcohol</option>
+                </select>
+
+                <select id="selectAlcohol">
+                    <option selected="selected">Alle Alcohol</option>
+                </select>
+
+                <input id="search" type="text" placeholder="Zoek een Cocktail">
+            </li>
+        <% } %>
+    </div>
+</ul>

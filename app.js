@@ -11,7 +11,7 @@ const {readFileSync} = require("fs");
 
 //laad cocktails
 const {alcoholDB, nonAlcoholDB, removeDrink, editDrink, addDrink} = require("./script/drank");
-const {Cocktail, removeCocktail, refreshDatabase, cocktailDB} = require("./script/cocktails");
+const {Cocktail, removeCocktail, refreshDatabase} = require("./script/cocktails");
 
 const debug = process.argv.includes("debug");
 
@@ -27,6 +27,26 @@ const prismPOST = {
 };
 
 const app = express();
+const upload = multer({dest: "upload/"});
+const xlsxCols = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
+
+if (process.argv.includes("refresh")){
+	refreshDatabase();
+}
+
+//start server
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, "html", "views"));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static("public"));
+app.use(cookieParser());
+app.use(session({
+	secret: client_secret,
+	resave: false,
+	saveUninitialized: true
+}));
+app.use(helmet());
 
 //laad form function
 function parseForm(data) {
@@ -97,25 +117,6 @@ function parseForm(data) {
 	return result;
 }
 
-//start server
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.static("public"));
-app.use(cookieParser());
-app.use(session({
-	secret: client_secret,
-	resave: false,
-	saveUninitialized: true
-}));
-app.use(helmet());
-
-const upload = multer({dest: "upload/"});
-const xlsxCols = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
-
-//refreshDatabase();
-// databaseWriter("alcohol");
-// databaseWriter("nonAlcohol");
-
 function checkCreateSession(req) {
 	if (req.session.stateID === undefined) {
 		console.log("Creating session state");
@@ -137,27 +138,43 @@ function checkPerm(req) {
 	return req.cookies["bolk-oath-permission"] !== undefined;
 }
 
-app.get('/', (req, res) => {
-	checkCreateSession(req);
-	if (checkLogin(req)) checkPerm(req);
+function setDebug(res){
 	if (debug){
 		res.setHeader('Content-Security-Policy', "default-src 'self' http:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com;");
 		res.cookie("bolk-oath-permission", "true");
 		res.cookie("bolk-oath-access-token", "true");
 	}
-	res.sendFile(path.join(__dirname, '/html/index.html'));
+}
+
+function genScripts(...scripts) {
+	let s = "";
+	for (let script of scripts){
+		script = script.endsWith(".js") ? script : script + ".js";
+		s += "<script src='/script/" + script + "'></script>\n";
+	}
+	return s;
+}
+
+app.get('/', (req, res) => {
+	checkCreateSession(req);
+	setDebug(res);
+	if (checkLogin(req)) checkPerm(req);
+
+	res.render("index", {scripts: genScripts("getDrank", "functions", "getCocktails", "loginButtons", "enableButtons"),
+	extraStyle: "<link href=\"/styles/style.css\" rel=\"stylesheet\" type=\"text/css\">",
+	location: "/"});
 });
 
 app.get('/new', (req, res) => {
 	checkCreateSession(req);
-	if (debug){
-		res.setHeader('Content-Security-Policy', "default-src 'self' http:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com;");
-	}
+	setDebug(res);
 	if (checkLogin(req)) {
 		checkPerm(req);
-		res.sendFile(path.join(__dirname, '/html/new.html'));
+
+		res.render("editor", { scripts: genScripts("getDrank", "editorFunctions", "functions", "enableButtons", "loginButtons"),
+			location: "/new"});
 	} else {
-		res.redirect("/")
+		res.redirect("/");
 	}
 });
 
@@ -167,7 +184,7 @@ app.post("/new", (req, res) => {
 		checkPerm(req);
 		const data = req.body;
 		if (!parseForm(data)) {
-			res.sendFile(path.join(__dirname, "/html/error400.html"));
+			res.render("error", {errorcode: "336 + 64 = 400", message: "De cocktail die je wilde toevoegen bestaat al, of er is eentje met dezelfde naam."})
 		} else res.redirect("/");
 	}
 
@@ -254,6 +271,7 @@ app.get("/login", (req, res) => {
 		}
 	}
 });
+
 app.get("/logout", (req, res) => {
 	console.log("Logged out " + req.session.user);
 	if (debug){
@@ -266,11 +284,11 @@ app.get("/logout", (req, res) => {
 
 app.get("/admin/cocktails", (req, res) => {
 	checkCreateSession(req);
-	if (debug){
-		res.setHeader('Content-Security-Policy', "default-src 'self' http:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com;");
-	}
+	setDebug(res);
 	if (checkLogin(req) && checkPerm(req)) {
-		res.sendFile(path.join(__dirname, '/html/admin/cocktails.html'));
+		res.render("index", {scripts: genScripts("getDrank", "functions", "getCocktails", "adminFunctions", "enableButtons", "loginButtons"),
+			extraStyle: "<link href=\"/styles/style.css\" rel=\"stylesheet\" type=\"text/css\">",
+			location: "/admin/cocktails"});
 	} else {
 		res.redirect("/login")
 	}
@@ -289,11 +307,10 @@ app.put("/admin/cocktails", (req, res) => {
 
 app.get("/admin/cocktails/edit", (req, res) => {
 	checkCreateSession(req);
-	if (debug){
-		res.setHeader('Content-Security-Policy', "default-src 'self' http:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com;");
-	}
+	setDebug(res);
 	if (checkLogin(req) && checkPerm(req)) {
-		res.sendFile(path.join(__dirname, '/html/admin/editCocktail.html'));
+		res.render("editor", { scripts: genScripts("getDrank", "functions", "getCocktails", "editorFunctions", "enableButtons", "adminFunctions", "loginButtons"),
+			location: "/admin/cocktails/edit"});
 	} else {
 		res.redirect("/login")
 	}
@@ -313,19 +330,19 @@ app.post("/admin/cocktails/edit", (req, res) => {
 	}
 });
 
-app.get("/admin/alcohol", (req, res) => {
+app.get("/admin/alcohols", (req, res) => {
 	checkCreateSession(req);
-	if (debug){
-		res.setHeader('Content-Security-Policy', "default-src 'self' http:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com;");
-	}
+	setDebug(res);
 	if (checkLogin(req) && checkPerm(req)) {
-		res.sendFile(path.join(__dirname, '/html/admin/alcohol.html'));
+		res.render("index", { scripts: genScripts("functions", "adminFunctions", "alcoholAdminInit", "enableButtons", "loginButtons"),
+			extraStyle: "<link href=\"/styles/drinkAdmin.css\" rel=\"stylesheet\" type=\"text/css\">",
+			location: "/admin/alcohols"});
 	} else {
 		res.redirect("/login")
 	}
 });
 
-app.put("/admin/alcohol", (req, res) => {
+app.put("/admin/alcohols", (req, res) => {
 	checkCreateSession(req);
 	if (checkLogin(req) && checkPerm(req)) {
 		if (req.query.remove) {
@@ -342,19 +359,19 @@ app.put("/admin/alcohol", (req, res) => {
 
 });
 
-app.get("/admin/nonalcohol", (req, res) => {
+app.get("/admin/nonalcohols", (req, res) => {
 	checkCreateSession(req);
-	if (debug){
-		res.setHeader('Content-Security-Policy', "default-src 'self' http:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com;");
-	}
+	setDebug(res);
 	if (checkLogin(req) && checkPerm(req)) {
-		res.sendFile(path.join(__dirname, '/html/admin/nonalcohol.html'));
+		res.render("index", { scripts: genScripts("functions", "adminFunctions", "nonAlcoholAdminInit", "enableButtons", "loginButtons"),
+			extraStyle: "<link href=\"/styles/drinkAdmin.css\" rel=\"stylesheet\" type=\"text/css\">",
+			location: "/admin/nonalcohols"});
 	} else {
 		res.redirect("/login")
 	}
 });
 
-app.put("/admin/nonalcohol", (req, res) => {
+app.put("/admin/nonalcohols", (req, res) => {
 	checkCreateSession(req);
 	if (checkLogin(req) && checkPerm(req)) {
 		if (req.query.remove) {
