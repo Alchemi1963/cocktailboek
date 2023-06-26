@@ -109,10 +109,10 @@ function printCocktail(cocktail){
 		extras.innerHTML = "Voeg "
 		for (let i in cocktail.extras) {
 			let item = cocktail.extras[i];
-			if (i == cocktail.extras.length - 1 && cocktail.extras.length != 1) {
+			if (i === cocktail.extras.length - 1 && cocktail.extras.length !== 1) {
 				extras.innerHTML = extras.innerHTML.substring(0, extras.innerHTML.length-2);
 				extras.innerHTML += " en " + item[0] + " toe.";
-			} else if (cocktail.extras.length != 1) {
+			} else if (cocktail.extras.length !== 1) {
 				extras.innerHTML += item[0] + ", ";
 			} else {
 				extras.innerHTML += item[0] + " toe.";
@@ -165,7 +165,10 @@ function printCocktail(cocktail){
 				put.onreadystatechange = function() {
 					if (put.status === 200) {
 						let scroll = window.scrollY || window.pageYOffset;
+						let search = document.getElementById("search").value;
 						location.reload();
+						document.getElementById("search").value = search;
+						document.getElementById("search").dispatchEvent(new Event("keyup"));
 						window.scrollTo(0, scroll);
 					}
 				}

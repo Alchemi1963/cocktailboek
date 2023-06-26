@@ -6,7 +6,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const https = require("https");
 const multer = require("multer");
-const XLSX = require("data-validation-xlsx");
+const XLSX = require("xlsx-populate");
 const {readFileSync} = require("fs");
 
 //laad cocktails
@@ -89,7 +89,7 @@ function parseForm(data) {
 		if (name !== "" && price !== "") extras.push([name, price]);
 		i++;
 	}
-	if (extras.length == 0) {
+	if (extras.length === 0) {
 		extras = null;
 	}
 	let result = Cocktail.create(data.name, data.selectGlass, alcohol, nonAlcohol, data.creator, data.desc, extras);
@@ -110,7 +110,7 @@ app.use(session({
 app.use(helmet());
 
 const upload = multer({dest: "upload/"});
-const xlsxCols = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L"];
+const xlsxCols = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
 
 //refreshDatabase();
 // databaseWriter("alcohol");
@@ -135,17 +135,6 @@ function checkPerm(req) {
 		return true;
 	}
 	return req.cookies["bolk-oath-permission"] !== undefined;
-}
-
-function clearCells(sheet, start, end) {
-	const range = XLSX.utils.decode_range(start + ":" + end);
-	for (let row = range.s.r; row <= range.e.r; row ++) {
-		for (let col = range.s.c; col <= range.e.c; col++){
-			const cellAddress = XLSX.utils.encode_cell({r: row, c: col});
-			sheet[cellAddress] = undefined;
-		}
-	}
-	return sheet;
 }
 
 app.get('/', (req, res) => {
@@ -383,141 +372,235 @@ app.put("/admin/nonalcohol", (req, res) => {
 });
 
 app.get("/admin/download", (req, res) => {
-	const filepath = path.join(__dirname, "/public/assets/template.xlsx");
-	//prepare workbook
-	const workbook = XLSX.readFile(filepath);
-	const alcoholSheet = workbook.Sheets["alcohol"];
-	const nonAlcoholSheet = workbook.Sheets["nonAlcohol"];
-	const cocktailSheet = workbook.Sheets["cocktails"];
+	XLSX.fromBlankAsync()
+		.then(workbook => {
+			//prepare workbook
+			const sheet = workbook.addSheet("cocktails");
+			workbook.sheet(0).delete();
+			const headers = ["name", "glass", "alcohol", "amount", "type", "nonAlcohol", "amount", "type", "extrasName", "extrasPrice", "creator", "desc"];
 
-	console.log(cocktailSheet);
+			//set column headers
+			let row = sheet.row(1);
+			let index = 1;
+			for (let header in headers){
+				header = headers[header];
+				row.cell(index).value(header);
+				index ++;
+			}
 
-	clearCells(alcoholSheet, "A2", "E102");
-	clearCells(nonAlcoholSheet, "A2", "D102");
+			//number datavalidation
+			for (let r of ["D2:D640001", "G2:G640001", "J2:J640001"]){
+				sheet.range(r).dataValidation({
+					type: "decimal",
+					allowBlank: true,
+					operator: "greaterThanOrEqual",
+					formula1: 0.0,
+					error: "Needs to be a decimal of at least 0",
+					errorTitle: "Wrong",
+					showErrorMessage: true
+				});
+			}
 
-	alcoholSheet["!ref"] = "A1:E" + (Object.values(alcoholDB).length + 1).toString();
-	nonAlcoholSheet["!ref"] = "A1:E" + (Object.values(nonAlcoholDB).length + 1).toString();
+			// glass validation
+			sheet.range("B2:B640001").dataValidation({
+				type: "list",
+				allowBlank: true,
+				showDropDown: true,
+				formula1: '"longdrink,pul,pitcher,shot,papa,tumbler"',
+				error: "Not a valid glass",
+				errorTitle: "Wrong",
+				showErrorMessage: true
+			});
 
-	let i = 2;
-	for (let key in alcoholDB) {
-		let alc = alcoholDB[key];
+			// type validation
+			for (let r of ["E2:E640001", "H2:H640001"]){
+				sheet.range(r).dataValidation({
+					type: "list",
+					allowBlank: true,
+					showDropDown: true,
+					formula1: '"shot,scheutje,fles,aanvullen"',
+					prompt: true,
+					error: "Needs to be either shot, scheutje, fles or aanvullen",
+					errorTitle: "Wrong",
+					showErrorMessage: true
+				});
+			}
 
-		alcoholSheet["A" + i.toString()] = {t: "s", v: key};
-		alcoholSheet["B" + i.toString()] = {t: "s", v: alc.name};
-		alcoholSheet["C" + i.toString()] = {t: "n", v: alc.alcPer};
-		alcoholSheet["D" + i.toString()] = {t: "n", v: alc.price};
-		alcoholSheet["E" + i.toString()] = {t: "n", v: alc.vol};
+			// alcohol validation
+			sheet.range("C2:C640001").dataValidation({
+				type: "list",
+				allowBlank: true,
+				showDropDown: true,
+				formula1: "alcohol!A2:A641",
+				prompt: true,
+				error: "This is not one of the alcohol options",
+				errorTitle: "Wrong",
+				showErrorMessage: true
+			});
 
-		i ++;
-	}
+			//nonAlcohol validation
+			sheet.range("F2:F640001").dataValidation({
+				type: "list",
+				allowBlank: true,
+				formula1: "nonAlcohol!A2:A641",
+				prompt: true,
+				error: "This is not one of the alcohol options",
+				errorTitle: "Wrong",
+				showErrorMessage: true
+			});
 
-	i = 2;
-	for (let key in nonAlcoholDB) {
-		let nonAlc = nonAlcoholDB[key];
-		nonAlcoholSheet["A" + i.toString()] = {t: "s", v: key};
-		nonAlcoholSheet["B" + i.toString()] = {t: "s", v: nonAlc.name};
-		nonAlcoholSheet["C" + i.toString()] = {t: "n", v: nonAlc.price};
-		nonAlcoholSheet["D" + i.toString()] = {t: "n", v: nonAlc.vol};
+			//alcohol
+			const alcSheet = workbook.addSheet("alcohol");
+			const alcHeaders = ["id", "name", "alcPer", "vol", "price"]
+			row = alcSheet.row(1);
+			index = 1
+			for (let h of alcHeaders){
+				row.cell(index).value(h);
+				index++;
+			}
 
-		i ++;
-	}
+			let rowIndex = 2;
+			for (let key in alcoholDB){
+				row = alcSheet.row(rowIndex);
+				row.cell(1).value(key);
+				key = alcoholDB[key];
+				row.cell(2).value(key.name);
+				row.cell(3).value(key.alcPer);
+				row.cell(4).value(key.vol);
+				row.cell(4).style({numberFormat: "#0 \"ml\""});
+				row.cell(5).value(key.price);
+				row.cell(5).style({numberFormat: "€ #,##0.00"});
+				rowIndex++;
+			}
 
-	cocktailSheet["!ref"] = "A1:L6401";
+			//nonAlcohol
+			const nonAlcSheet = workbook.addSheet("nonAlcohol");
+			const nonAlcHeaders = ["id", "name", "vol", "price"]
+			row = nonAlcSheet.row(1);
+			index = 1
+			for (let h of nonAlcHeaders){
+				row.cell(index).value(h);
+				index++;
+			}
 
-	for (let i = 2; i <= 6401; i++){
-		cocktailSheet["B" + i.toString()] = { t: "s", v: ""};
-		cocktailSheet["C" + i.toString()] = { t: "s", v: ""};
-		cocktailSheet["D" + i.toString()] = { t: "n", v: ""};
-		cocktailSheet["E" + i.toString()] = { t: "s", v: ""};
-		cocktailSheet["F" + i.toString()] = { t: "s", v: ""};
-		cocktailSheet["G" + i.toString()] = { t: "n", v: ""};
-		cocktailSheet["H" + i.toString()] = { t: "s", v: ""};
-		cocktailSheet["J" + i.toString()] = { t: "n", v: ""};
-		cocktailSheet["B" + i.toString()].dataValidation = {type: "list", formula1: '"longdrink,tumbler,papa,pul,pitcher,shot"'};
-		cocktailSheet["C" + i.toString()].dataValidation = {type: "list", formula1: '"' + Object.keys(alcoholDB).join(",") + '"'};
-		cocktailSheet["D" + i.toString()].dataValidation = {type: "decimal", operator: "greaterThan", formula1: 0.0};
-		cocktailSheet["E" + i.toString()].dataValidation = {type: "list", formula1: '"shot,fles,scheutje,aanvullen"'};
-		cocktailSheet["F" + i.toString()].dataValidation = {type: "list", formula1: '"' + Object.keys(nonAlcoholDB).join(",") + '"'};
-		cocktailSheet["G" + i.toString()].dataValidation = {type: "decimal", operator: "greaterThan", formula1: 0.0};
-		cocktailSheet["H" + i.toString()].dataValidation = {type: "list", formula1: '"shot,fles,scheutje,aanvullen"'};
-		cocktailSheet["J" + i.toString()].dataValidation = {type: "decimal", operator: "greaterThanOrEqual", formula1: 0.0};
-		if (i === 3) console.log(cocktailSheet);
-	}
+			rowIndex = 2;
+			for (let key in nonAlcoholDB){
+				row = nonAlcSheet.row(rowIndex);
+				row.cell(1).value(key);
+				key = nonAlcoholDB[key];
+				row.cell(2).value(key.name);
+				row.cell(3).value(key.vol);
+				row.cell(3).style({numberFormat: "#0 \"ml\""});
+				row.cell(4).value(key.price);
+				row.cell(4).style({numberFormat: "€ #,##0.00"});
+				rowIndex++;
+			}
 
-
-	XLSX.writeFileXLSX(workbook, path.join(__dirname, "/public/assets/template.xlsx"));
-
-	res.setHeader("Content-Disposition", "attachment; filename=bulk_import.xlsx");
-	res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-	res.sendFile(filepath);
+			//send to client
+			workbook.outputAsync().then(buffer => {
+				res.setHeader("Content-Disposition", "attachment; filename=bulk_import.xlsx");
+				res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+				res.send(buffer);
+			});
+		});
 });
 
 app.post("/admin/upload", upload.single("file"), (req, res) => {
 	const filepath = req.file.path;
-	const workbook = XLSX.readFile(filepath);
-	const sheet = workbook.Sheets["cocktails"];
 
-	let addDB = [];
-	let row = 2;
-	let index = -1;
-	let fails = [];
+	XLSX.fromFileAsync(filepath)
+		.then(workbook => {
+			const sheet = workbook.sheet("cocktails");
 
-	while (true) {
-		let emptyCount = 0;
-		for (let letter in xlsxCols) {
-			letter = xlsxCols[letter];
-			let cell = sheet[letter + row.toString()]
-			if (cell !== undefined) {
-				let v = cell.v;
-				if (letter === "A") {
-					addDB.push({name: v});
-					index ++;
-				} else if (letter === "B") addDB[index]["glass"] = v;
-				else if (letter === "C") {
-					if (addDB[index]["alcohol"] === undefined){
-						addDB[index]["alcohol"] = {};
+			let addDB = [];
+			let fails = [];
+			let index = -1;
+			let rowIndex = 2;
+			let emptyCount = 0;
+
+			while (emptyCount < 11) {
+				const row = sheet.row(rowIndex);
+				emptyCount = 0;
+				for (let l of xlsxCols) {
+					let value = row.cell(l).value();
+
+					if (value === undefined) {
+						emptyCount ++;
+						continue;
 					}
-					addDB[index]["alcohol"][v] = [];
-				}
-				else if (letter === "D") addDB[index]["alcohol"][sheet["C" + row.toString()].v].push(v);
-				else if (letter === "E") addDB[index]["alcohol"][sheet["C" + row.toString()].v].push(v);
-				else if (letter === "F") {
-					if (addDB[index]["nonAlcohol"] === undefined){
-						addDB[index]["nonAlcohol"] = {};
+
+					switch(l){
+						case "A":
+							addDB.push({name : value});
+							index++;
+							break;
+						case "B":
+							addDB[index]["glass"] = value;
+							break;
+						case "C":
+							if (addDB[index]["alcohol"] === undefined) {
+								addDB[index]["alcohol"] = {};
+							}
+							addDB[index]["alcohol"][value] = [];
+							break;
+						case "D":
+							addDB[index]["alcohol"][row.cell("C").value()].push(value);
+							break;
+						case "E":
+							addDB[index]["alcohol"][row.cell("C").value()].push(value);
+							break;
+						case "F":
+							if (addDB[index]["nonAlcohol"] === undefined) {
+								addDB[index]["nonAlcohol"] = {};
+							}
+							addDB[index]["nonAlcohol"][value] = [];
+							break;
+						case "G":
+							addDB[index]["nonAlcohol"][row.cell("F").value()].push(value);
+							break;
+						case "H":
+							addDB[index]["nonAlcohol"][row.cell("F").value()].push(value);
+							break;
+						case "I":
+							if (addDB[index]["extras"] === undefined){
+								addDB[index]["extras"] = []
+							}
+							addDB[index]["extras"].push([value]);
+							break;
+						case "J":
+							addDB[index]["extras"][addDB[index]["extras"].length - 1].push(value);
+							break;
+						case "K":
+							addDB[index]["creator"] = value;
+							break;
+						case "L":
+							addDB[index]["desc"] = value;
+							break;
 					}
-					addDB[index]["nonAlcohol"][v] = [];
+
 				}
-				else if (letter === "G") addDB[index]["nonAlcohol"][sheet["F" + row.toString()].v].push(v);
-				else if (letter === "H") addDB[index]["nonAlcohol"][sheet["F" + row.toString()].v].push(v);
-				else if (letter === "I") {
-					if (addDB[index]["extras"] === undefined) {
-						addDB[index]["extras"] = [];
-					}
-					addDB[index]["extras"].push([v]);
-				}
-				else if (letter === "J") addDB[index]["extras"][addDB[index]["extras"].length - 1].push(v);
-				else if (letter === "K") addDB[index]["creator"] = v;
-				else if (letter === "L") addDB[index]["desc"] = v;
+				rowIndex ++;
 			}
-			else emptyCount ++;
-		}
-		if (emptyCount == 11) break; // stop when an entire row is empty
-		row ++;
-	}
-	for (let cock in addDB){
-		if (cock["alcohol"] === undefined) cock["alcohol"] = null;
-		if (cock["nonAlcohol"] === undefined) cock["nonAlcohol"] = null;
-		if (cock["extras"] === undefined) cock["extras"] = null;
-		if (cock["creator"] === undefined) cock["creator"] = null;
-		if (cock["desc"] === undefined) cock["desc"] = null;
-		cock = addDB[cock];
-		if (Cocktail.create(cock.name, cock.glass, cock.alcohol, cock.nonAlcohol, cock.creator, cock.desc, cock.extras)) {
-			console.log("Succesfully created " + cock.name);
-		} else {
-			console.log("Failed creating " + cock.name);
-			fails.push(cock.name);
-		}
-	}
+
+			for (let cock in addDB){
+				if (cock["alcohol"] === undefined) cock["alcohol"] = null;
+				if (cock["nonAlcohol"] === undefined) cock["nonAlcohol"] = null;
+				if (cock["extras"] === undefined) cock["extras"] = null;
+				if (cock["creator"] === undefined) cock["creator"] = null;
+				if (cock["desc"] === undefined) cock["desc"] = null;
+				cock = addDB[cock];
+
+				if (Cocktail.create(cock.name, cock.glass, cock.alcohol, cock.nonAlcohol, cock.creator, cock.desc, cock.extras)) {
+					console.log("Succesfully created " + cock.name);
+				} else {
+					console.log("Failed creating " + cock.name);
+					fails.push(cock.name);
+				}
+			}
+
+			console.log("Succesfully created " + (addDB.length - fails.length).toString() + " cocktails");
+			console.log("Failed creating " + fails.length.toString() + " cocktails\n" + fails.join("\n\t"));
+		})
 	res.sendStatus(200);
 });
 
