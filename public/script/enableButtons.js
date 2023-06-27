@@ -104,7 +104,7 @@ enableButton("sort", "change", function(){
 
 enableButton("backToAll", "click", backToAll);
 
-if (location.pathname.includes("admin")) {
+if (location.pathname.includes("admin") && location.pathname !== "/admin/upload") {
 	let db = [];
 
 	if (location.pathname.includes("cocktails")) {

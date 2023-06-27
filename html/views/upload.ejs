@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <%- include("head.ejs") %>
+    <link href="/styles/upload.css" rel="stylesheet" type="text/css">
+</head>
+
+<header id="header">
+    <%- include("header.ejs", {filter: false}) %>
+</header>
+
+<body>
+<form action="/admin/upload" method="POST">
+   <fieldset>
+       <h2>Selecteer het .xlsx bestand om te importeren</h2>
+       <p>Deze moet opgebouwd zijn zoals in de template</p>
+       <a href="/admin/download">Klik hier om de template te downloaden</a>
+       <br>
+       <input type="file" id="file" name="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+       <br>
+       <button type="submit" id="submit">Upload</button>
+       <br>
+       <br>
+   </fieldset>
+</form>
+
+<%- scripts %>
+
+</body>
+</html>

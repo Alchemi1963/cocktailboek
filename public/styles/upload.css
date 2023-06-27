@@ -1,0 +1,99 @@
+p{
+	text-align: center;
+	margin-bottom: 0;
+}
+
+form{
+	position: absolute;
+	margin-top: 25px;
+	overflow-y: visible;
+}
+
+fieldset{
+	background-color: white;
+	border: 2px solid gray;
+	position: relative;
+}
+
+form button {
+	font-size: 25px;
+	display: inline-block;
+	transform: translateX(-50%);
+}
+
+form button:hover {
+	transform: translate3d(-49.8%, 1.05%, 0);
+}
+
+input{
+	position: absolute;
+	transform: translateX(-50%);
+}
+
+/* Desktop Scherm*/
+@media screen and (min-width: 1000px){
+	form{
+		min-width: 40vw;
+		max-width: 40vw;
+		left: 30vw;
+	}
+
+	fieldset{
+		border-radius: 25px;
+		min-height: 100%;
+	}
+
+}
+
+
+/* Tablet Scherm */
+@media screen and (min-width: 760px) and (max-width: 1000px){
+	form{
+		min-width: 80vw;
+		max-width: 80vw;
+		left: 10vw;
+		font-size: xx-large;
+	}
+
+	fieldset{
+		border-radius: 25px;
+		min-height: 100%;
+	}
+
+	input{
+		width: 60%;
+		font-size: xx-large;
+		margin-bottom: 2%;
+		margin-top: 2%;
+	}
+
+	form button{
+		font-size: 35px;
+		margin-top: 4%;
+	}
+}
+
+
+/* Telefoon Scherm*/
+@media screen and (max-width: 760px){
+	form{
+		min-width: 95vw;
+		max-width: 95vw;
+		min-height: 80%;
+		left: 2.5vw;
+	}
+
+	fieldset{
+		border-radius: 15px;
+		min-height: 100%;
+	}
+
+	input{
+		width: 60%;
+		margin-bottom: 2%;
+	}
+
+	form button{
+		margin-top: 2%;
+	}
+}

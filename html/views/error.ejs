@@ -1,49 +1,21 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="/styles/style.css" rel="stylesheet" type="text/css">
-    <link href="/styles/shared.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <meta charset="utf-8">
-    <title>Het Bolksch CocktailboeHet Bolksch Cocktailboek</title>
-    <link rel="shortcut icon" href="/assets/bolkvis.png"/>
+    <%- include("head.ejs") %>
 </head>
 
 <body>
 <header id="header">
-    <ul id="navbar">
-        <a href="/public" class="home" , style="display: none">Bolksch Cocktailboek</a>
-        <a id="hamburger" class="icon" style="display: none">
-            <i class="fa fa-bars"></i>
-        </a>
-        <div class="topnav" id="topnav">
-            <li id="home"><a href="/public">Thuisch</a></li>
-            <li id="randomCocktail"><a>Random Cocktail</a></li>
-            <li id="backToAll" style="display: none"><a>Alle cocktails</a></li>
-            <li id="login"><a href="/login">Log In</a></li>
-            <li id="logout" style="display:none"><a href="/logout">Log Out</a></li>
-            <li id="new" style="display:none"><a href="/new">Nieuwe Cocktail</a></li>
-            <li class="dropdown" id="admin" style="display:none">
-                <a>Admin</a>
-                <div class="dropdown-content">
-                    <a href="/admin/cocktails">Cocktails</a>
-                    <a href="/admin/alcohol">Alcohols</a>
-                    <a href="/admin/nonalcohol">Non Alcohols</a>
-                </div>
-            </li>
-        </div>
-    </ul>
+    <%- include("header.ejs", {location: location}) %>
 </header>
 
 <h1>Error <%= errorcode %></h1>
 <p1><%= message %></p1>
 
-
 <script src="/script/functions.js"></script>
 <script src="/script/getCocktails.js"></script>
-<script src="/script/loginButtons.js"></script>
 <script src="/script/enableButtons.js"></script>
+<script src="/script/loginButtons.js"></script>
 
 </body>
 </html>

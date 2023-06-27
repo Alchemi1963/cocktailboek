@@ -18,6 +18,8 @@
                 <% if (!["/admin/cocktails", "/admin/cocktails/edit"].includes(location)) { %> <a href="/admin/cocktails">Cocktails</a>  <% } %>
                 <% if (location !== "/admin/alcohols") { %> <a href="/admin/alcohols">Alcohols</a> <% } %>
                 <% if (location !== "/admin/nonalcohols") { %> <a href="/admin/nonalcohols">Non Alcohols</a> <% } %>
+                <a href="/admin/download">Bulk Import Template</a>
+                <% if (location !== "/admin/upload") { %> <a href="/admin/upload">Bulk Import</a> <% } %>
             </div>
         </li>
 
