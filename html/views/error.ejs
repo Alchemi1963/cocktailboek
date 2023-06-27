@@ -6,7 +6,7 @@
 
 <body>
 <header id="header">
-    <%- include("header.ejs", {location: location}) %>
+    <%- include("header.ejs", {filter: false, location: location}) %>
 </header>
 
 <h1>Error <%= errorcode %></h1>

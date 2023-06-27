@@ -172,7 +172,7 @@ app.get('/new', (req, res) => {
 		res.render("editor", { scripts: genScripts("getDrank", "editorFunctions", "functions", "enableButtons", "loginButtons"),
 			location: "/new"});
 	} else {
-		res.render("error", {location: "/", errorcode: "401 Unauthorized", message: "Je bent niet ingelogd.<br>Als deze fout zich blijft voordoen, neem contact op met beheer."});
+		res.render("error", {location: "/", errorcode: "401 Unauthorized", message: "Je bent niet ingelogd.\nAls deze fout zich blijft voordoen, neem contact op met beheer."});
 	}
 });
 
@@ -292,7 +292,7 @@ app.get("/admin/cocktails", (req, res) => {
 			extraStyle: "<link href=\"/styles/style.css\" rel=\"stylesheet\" type=\"text/css\">",
 			location: "/admin/cocktails"});
 	} else {
-		res.render("error", {location: "/admin/cocktails", errorcode: "401 Unauthorized", message: "Je bent niet geauthoriseerd voor deze pagina.<br>Als je denkt dat dit een fout is, neem contact op met beheer."});
+		res.render("error", {location: "/admin/cocktails", errorcode: "401 Unauthorized", message: "Je bent niet geauthoriseerd voor deze pagina.\nAls je denkt dat dit een fout is, neem contact op met beheer."});
 	}
 });
 
@@ -307,7 +307,7 @@ app.put("/admin/cocktails", (req, res) => {
 		res.render("error", {
 			location: "/admin/cocktails",
 			errorcode: "401 Unauthorized",
-			message: "Je bent niet geauthoriseerd om dit te doen.<br>Als je denkt dat dit een fout is, neem contact op met beheer."
+			message: "Je bent niet geauthoriseerd om dit te doen.\nAls je denkt dat dit een fout is, neem contact op met beheer."
 		});
 	}
 });
@@ -319,7 +319,7 @@ app.get("/admin/cocktails/edit", (req, res) => {
 		res.render("editor", { scripts: genScripts("getDrank", "functions", "getCocktails", "editorFunctions", "enableButtons", "adminFunctions", "loginButtons"),
 			location: "/admin/cocktails/edit"});
 	} else {
-		res.render("error", {location: "/admin/cocktails/edit", errorcode: "401 Unauthorized", message: "Je bent niet geauthoriseerd voor deze pagina.<br>Als je denkt dat dit een fout is, neem contact op met beheer."});
+		res.render("error", {location: "/admin/cocktails/edit", errorcode: "401 Unauthorized", message: "Je bent niet geauthoriseerd voor deze pagina.\nAls je denkt dat dit een fout is, neem contact op met beheer."});
 	}
 });
 
@@ -338,7 +338,7 @@ app.post("/admin/cocktails/edit", (req, res) => {
 		}
 		res.redirect("/admin/cocktails?scroll=" + data.scroll);
 	} else {
-		res.render("error", {location: "/admin/cocktails/edit", errorcode: "401 Unauthorized", message: "Je bent niet geauthoriseerd om dit te doen.<br>Als je denkt dat dit een fout is, neem contact op met beheer."});
+		res.render("error", {location: "/admin/cocktails/edit", errorcode: "401 Unauthorized", message: "Je bent niet geauthoriseerd om dit te doen.\nAls je denkt dat dit een fout is, neem contact op met beheer."});
 	}
 });
 
@@ -350,7 +350,7 @@ app.get("/admin/alcohols", (req, res) => {
 			extraStyle: "<link href=\"/styles/drinkAdmin.css\" rel=\"stylesheet\" type=\"text/css\">",
 			location: "/admin/alcohols"});
 	} else {
-		res.render("error", {location: "/admin/alcohols", errorcode: "401 Unauthorized", message: "Je bent niet geauthoriseerd voor deze pagina.<br>Als je denkt dat dit een fout is, neem contact op met beheer."});
+		res.render("error", {location: "/admin/alcohols", errorcode: "401 Unauthorized", message: "Je bent niet geauthoriseerd voor deze pagina.\nAls je denkt dat dit een fout is, neem contact op met beheer."});
 	}
 });
 
@@ -366,7 +366,7 @@ app.put("/admin/alcohols", (req, res) => {
 		}
 		res.sendStatus(200);
 	} else {
-		res.render("error", {location: "/admin/alcohols", errorcode: "401 Unauthorized", message: "Je bent niet geauthoriseerd om dit te doen.<br>Als je denkt dat dit een fout is, neem contact op met beheer."});
+		res.render("error", {location: "/admin/alcohols", errorcode: "401 Unauthorized", message: "Je bent niet geauthoriseerd om dit te doen.\nAls je denkt dat dit een fout is, neem contact op met beheer."});
 	}
 
 });
@@ -379,7 +379,7 @@ app.get("/admin/nonalcohols", (req, res) => {
 			extraStyle: "<link href=\"/styles/drinkAdmin.css\" rel=\"stylesheet\" type=\"text/css\">",
 			location: "/admin/nonalcohols"});
 	} else {
-		res.render("error", {location: "/admin/nonalcohols", errorcode: "401 Unauthorized", message: "Je bent niet geauthoriseerd voor deze pagina.<br>Als je denkt dat dit een fout is, neem contact op met beheer."});
+		res.render("error", {location: "/admin/nonalcohols", errorcode: "401 Unauthorized", message: "Je bent niet geauthoriseerd voor deze pagina.\nAls je denkt dat dit een fout is, neem contact op met beheer."});
 	}
 });
 
@@ -396,7 +396,7 @@ app.put("/admin/nonalcohols", (req, res) => {
 		}
 		res.sendStatus(200);
 	} else {
-		res.render("error", {location: "/admin/nonalcohols", errorcode: "401 Unauthorized", message: "Je bent niet geauthoriseerd om dit te doen.<br>Als je denkt dat dit een fout is, neem contact op met beheer."});
+		res.render("error", {location: "/admin/nonalcohols", errorcode: "401 Unauthorized", message: "Je bent niet geauthoriseerd om dit te doen.\nAls je denkt dat dit een fout is, neem contact op met beheer."});
 	}
 
 });
@@ -405,7 +405,7 @@ app.get("/admin/download", (req, res) => {
 	checkCreateSession(req);
 	setDebug(res);
 	if (!checkLogin(req) || !checkPerm(req)) {
-		res.render("error", {location: "/admin/download", errorcode: "401 Unauthorized", message: "Je bent niet geauthoriseerd om dit te doen.<br>Als je denkt dat dit een fout is, neem contact op met beheer."});
+		res.render("error", {location: "/admin/download", errorcode: "401 Unauthorized", message: "Je bent niet geauthoriseerd om dit te doen.\nAls je denkt dat dit een fout is, neem contact op met beheer."});
 		return;
 	}
 
@@ -548,14 +548,14 @@ app.get("/admin/upload", (req, res) => {
 	if (checkLogin(req) && checkPerm(req)) {
 		res.render("upload.ejs", {location: "/admin/upload", scripts: genScripts("functions", "getDrank", "enableButtons", "loginButtons")});
 	} else {
-		res.render("error", {location: "/admin/upload", errorcode: "401 Unauthorized", message: "Je bent niet geauthoriseerd voor deze pagina.<br>Als je denkt dat dit een fout is, neem contact op met beheer."});
+		res.render("error", {location: "/admin/upload", errorcode: "401 Unauthorized", message: "Je bent niet geauthoriseerd voor deze pagina.\nAls je denkt dat dit een fout is, neem contact op met beheer."});
 	}
 });
 
 app.post("/admin/upload", upload.single("file"), (req, res) => {
 	setDebug(res);
 	if (!checkLogin(req) || !checkPerm(req)) {
-		res.render("error", {location: "/admin/upload", errorcode: "401 Unauthorized", message: "Je bent niet geauthoriseerd om te uploaden.<br>Als je denkt dat dit een fout is, neem contact op met beheer."})
+		res.render("error", {location: "/admin/upload", errorcode: "401 Unauthorized", message: "Je bent niet geauthoriseerd om te uploaden.\nAls je denkt dat dit een fout is, neem contact op met beheer."})
 		return;
 	}
 
@@ -655,7 +655,7 @@ app.post("/admin/upload", upload.single("file"), (req, res) => {
 			console.log("Failed creating " + fails.length.toString() + " cocktails\n" + fails.join("\n\t"));
 
 			if (fails.length > 0){
-				res.render("error", {location: "/admin/upload", errorcode: "336 + 64 = 400 Bad Request", message: fails.join(", ") + " konden niet geimporteerd worden.<br> Check je import xlsx."});
+				res.render("error", {location: "/admin/upload", errorcode: "336 + 64 = 400 Bad Request", message: fails.join(", ") + " konden niet geimporteerd worden.\n Check je import xlsx."});
 			} else {
 				res.redirect("/");
 			}
