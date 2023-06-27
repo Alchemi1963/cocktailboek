@@ -5,101 +5,117 @@ p{
 }
 
 form{
-	position: center;
-	margin-left: auto;
-	margin-right: auto;
+	position: absolute;
 	margin-top: 25px;
+	overflow-y: visible;
 }
 
 fieldset{
 	background-color: white;
 	border: 2px solid gray;
-}
-
-.field{
-	display: inline-block;
-	position: center;
-	margin-left: 2px;
-	margin-right: 2px;
-}
-
-#terug{
-	float: left;
-}
-
-#reset{
-	float: left;
-}
-
-#submit{
-	float: right;
+	position: relative;
 }
 
 #addExtra{
-	float: right;
 	font-size: inherit;
-	margin-bottom: 0px;
+	margin-bottom: 0;
+	height: initial;
+
 }
 
 h3{
 	font-size: inherit;
 }
 
+.field{
+	margin-bottom: 1%;
+	min-height: 1px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: flex-start;
+	flex-wrap: wrap;
+}
+
+.field div{
+	flex: 0 1 auto;
+	margin: 0 0 0 auto;
+	padding: 0;
+}
+
+.field button{
+	flex: 0 1 auto;
+	height: auto;
+	position: initial;
+}
+
+#alcoholAmount div,
+#nonAlcoholAmount div{
+	width: 100%;
+}
+
+#reset{
+	margin: 0 auto 0 0;
+}
+
+#submit{
+	margin: 0 0 0 auto;
+}
+
 label{
-	float: left;
 	font-size: inherit;
+	flex: 0 1 auto;
+	height: auto;
+	margin: 0 auto 0 0;
 }
 
 select{
-	float: right;
+	flex: 0 1 auto;
 	font-size: inherit;
 	border: 1px solid darkgray;
-	margin: 0px;
-	padding: 0px;
+	margin: 0 0 0 auto;
+	padding: 0;
 }
 
 input{
-	float: right;
-	text-align: left;
 	font-size: inherit;
+	flex: 0 1 auto;
+	text-align: left;
+	margin: 0 0 0 auto;
 	border: 1px solid darkgray;
-	margin: 0px;
-	padding: 0px;
+	padding: 0;
 }
 
 textarea{
-	float: right;
-	text-align: left;
 	font-size: inherit;
-	margin: -2px;
-	padding: 0px;
+	flex: 0 1 auto;
+	text-align: left;
+	margin: 0 0 0 auto;
+	padding: 0;
 	border: 1px solid darkgray;
 }
 
-.extraNameLabel{
+.hoeveelheid{
+	position: absolute;
+}
+
+label.hoeveelheid{
+	text-align: left;
+	position: initial;
 	float: left;
-	margin-left: 20%;
-	margin-top: 2px;
+}
+
+#extraStuff{
+	width: 50%;
 }
 
 .extraName{
-	max-width: 30%;
-	margin-left: 4px;
-	float: left;
-	margin-top: 2px;
-}
-
-.extraPriceLabel{
-	float: right;
-	margin-right: 20%;
-	margin-top: 2px;
+	max-width: 40%;
+	margin-right: 4%;
 }
 
 .extraPrice{
-	max-width: 10%;
-	margin-left: 4px;
-	float: right;
-	margin-top: 2px;
+	max-width: 20%;
 }
 
 
@@ -108,37 +124,62 @@ textarea{
 	form{
 		min-width: 40vw;
 		max-width: 40vw;
+		min-height: 80%;
+		left: 30vw;
 	}
 
 	fieldset{
 		border-radius: 25px;
+		min-height: 100%;
 	}
 
 	.field{
 		width: 90%;
-		height: fit-content;
+		transform: translateX(5%);
 		font-size: large;
 	}
 
+	.field div {
+		width: 60%;
+	}
+
+	.field div input{
+		width: calc(100% - 2px);
+	}
+
+	.field div select{
+		width: 100%;
+	}
+
 	select{
-		height: available;
 		width: 60%;
 	}
 
 	input{
-		height: available;
 		width: calc(60% - 2px);
 	}
 
-	.hoeveelheid {
-		float: right;
+	.field div .hoeveelheid {
 		width: calc(30% - 2px);
-		margin-left: 4px;
+		margin-top: 4px;
+	}
+
+	.field div label.hoeveelheid{
+		width: 40%;
+		margin-left: 2px;
+	}
+
+	.field div input.hoeveelheid {
+		right: 30%;
+	}
+
+	.field div select.hoeveelheid {
+		right: 0;
 	}
 
 	textarea{
 		height: 10%;
-		width: 60%;
+		width: calc(60% - 2px);
 	}
 }
 
@@ -148,37 +189,62 @@ textarea{
 	form{
 		min-width: 80vw;
 		max-width: 80vw;
+		min-height: 80%;
+		left: 10vw;
 	}
 
 	fieldset{
 		border-radius: 25px;
+		min-height: 100%;
 	}
 
 	.field{
 		width: 90%;
-		height: fit-content;
 		font-size: large;
+		transform: translateX(5%);
+	}
+
+	.field div {
+		width: 60%;
+	}
+
+	.field div input{
+		width: calc(100% - 2px);
+	}
+
+	.field div select{
+		width: 100%;
 	}
 
 	select{
-		height: available;
 		width: 60%;
 	}
 
 	input{
-		height: available;
 		width: calc(60% - 2px);
 	}
 
-	.hoeveelheid {
-		float: right;
+	.field div .hoeveelheid {
 		width: calc(30% - 2px);
+		margin-top: 8px;
+	}
+
+	.field div label.hoeveelheid {
+		width: 40%;
 		margin-left: 4px;
+	}
+
+	.field div input.hoeveelheid {
+		right: 30%;
+	}
+
+	.field div select.hoeveelheid {
+		right: 0;
 	}
 
 	textarea{
 		height: 10%;
-		width: 60%;
+		width: calc(60% - 2px);
 	}
 }
 
@@ -188,37 +254,63 @@ textarea{
 	form{
 		min-width: 95vw;
 		max-width: 95vw;
+		min-height: 80%;
+		left: 2.5vw;
 	}
 
 	fieldset{
 		border-radius: 15px;
+		min-height: 100%;
 	}
 
 	.field{
-		width: 90%;
-		height: fit-content;
+		width: 95%;
+		transform: translateX(2.5%);
 		font-size: large;
 	}
 
+	.field div{
+		width: 60%;
+	}
+
+	.field div input{
+		width: calc(100% - 2px);
+	}
+
+	.field div select{
+		width: 100%;
+	}
+
 	select{
-		height: available;
 		width: 60%;
 	}
 
 	input{
-		height: available;
 		width: calc(60% - 2px);
 	}
 
-	.hoeveelheid {
-		float: right;
-		width: calc(30% - 2px);
-		margin-left: 4px;
+	.field div .hoeveelheid {
+ 		width: calc(30% - 2px);
+		margin-top: 4px;
 	}
+
+	.field div label.hoeveelheid{
+		width: 40%;
+		margin-left: 2px;
+	}
+
+	.field div input.hoeveelheid{
+		right: 30%;
+	}
+
+	.field div select.hoeveelheid{
+		right: 0;
+	}
+
 
 	textarea{
 		height: 10%;
-		width: 60%;
+		width: calc(60% - 2px);
 	}
 
 	#selectAlcoholSearch {
@@ -229,25 +321,17 @@ textarea{
 		display: none;
 	}
 
-	.extraNameLabel{
-		float: left;
-		margin-left: 10%;
+	#extraStuff{
+		width: 70%;
 	}
 
 	.extraName{
 		max-width: 30%;
 		margin-left: 4px;
-		float: left;
-	}
-
-	.extraPriceLabel{
-		float: right;
-		margin-right: 10%;
 	}
 
 	.extraPrice{
 		max-width: 20%;
 		margin-left: 4px;
-		float: right;
 	}
 }

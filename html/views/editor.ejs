@@ -15,16 +15,13 @@
     <input type="hidden" name="scroll" id="scroll">
     <fieldset>
 
-        <div class="field">
-            <% if (location === "/new") { %> <h2>Nieuwe cocktail</h2> <% } %>
-            <% if (location === "/admin/cocktails/edit") { %> <h2>Edit cocktail</h2> <% } %>
-        </div>
+        <% if (location === "/new") { %> <h2>Nieuwe cocktail</h2> <% } %>
+        <% if (location === "/admin/cocktails/edit") { %> <h2>Edit cocktail</h2> <% } %>
 
         <div class="field">
             <label for="name">Naam:</label>
             <input type="text" name="name" id="name" required>
         </div>
-        <br><br>
 
         <div class="field">
             <label for="selectGlass">Glas:</label>
@@ -37,59 +34,52 @@
                 <option name="shot" value="shot">Shot</option>
             </select>
         </div>
-        <br><br>
 
         <div class="field">
             <label for="desc">Omschrijving:</label>
             <textarea name="desc" id="desc" rows="4" cols="30"></textarea>
         </div>
-        <br><br>
 
         <div class="field">
             <label for="creator">Maker:</label>
             <input type="text" name="creator" id="creator">
         </div>
-        <br><br>
 
         <div class="field">
             <label for="nieuweSelectAlcohol" id="alcoholLabel">Alcohol:</label>
-            <input type="text" id="selectAlcoholSearch" placeholder="Zoek een drankje">
-            <select name="selectAlcohol" id="nieuweSelectAlcohol" multiple></select>
-        </div>
-        <br><br>
-
-        <div class="field">
-            <div id="alcoholAmount" style="display:none">
-                <label>Hoeveel alcohol?</label>
-                <br><br>
+            <div>
+                <input type="text" id="selectAlcoholSearch" placeholder="Zoek een drankje">
+                <select name="selectAlcohol" id="nieuweSelectAlcohol" multiple></select>
             </div>
+        </div>
+
+        <div class="field" id="alcoholAmount" style="display:none">
+            <label>Hoeveel alcohol?</label>
         </div>
 
         <div class="field">
             <label for="nieuweSelectNonAlcohol">Non Alcohol:</label>
-            <input type="text" id="selectNonAlcoholSearch" placeholder="Zoek een drankje">
-            <select name="selectNonAlcohol" id="nieuweSelectNonAlcohol" multiple></select>
-        </div>
-        <br><br>
-
-        <div class="field">
-            <div id="nonAlcoholAmount" style="display:none">
-                <label>Hoeveel non alcohol?</label>
-                <br><br>
+            <div>
+                <input type="text" id="selectNonAlcoholSearch" placeholder="Zoek een drankje">
+                <select name="selectNonAlcohol" id="nieuweSelectNonAlcohol" multiple></select>
             </div>
+        </div>
+
+        <div class="field" id="nonAlcoholAmount" style="display:none">
+            <label>Hoeveel non alcohol?</label>
         </div>
 
         <div class="field">
             <label for="extraStuff">Extra dingen er in?</label>
             <button id="addExtra">+</button>
-            <br>
             <div id="extraStuff">
             </div>
-            <br><br>
         </div>
 
-        <button type="reset" id="reset">Reset</button>
-        <button type="submit" id="submit">Submit</button>
+        <div class="field">
+            <button type="reset" id="reset">Reset</button>
+            <button type="submit" id="submit">Submit</button>
+        </div>
     </fieldset>
 </form>
 

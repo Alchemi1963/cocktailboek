@@ -344,5 +344,5 @@ function generateExtra(element){
 	extraPrice.defaultValue = "0";
 	extraPriceLabel.htmlFor = extraPrice.id;
 
-	element.append(extraNameLabel, extraName, extraPriceLabel, extraPrice);
+	element.append(document.createElement("br"), extraNameLabel, extraName, extraPriceLabel, extraPrice);
 }

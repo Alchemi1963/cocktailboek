@@ -63,22 +63,25 @@ function updateSelectQuantity(e) {
                 input.id = "selectN" + element.value.replaceAll(" ", "_");
                 input.required = true;
                 label.innerHTML = element.innerHTML;
-                label.style.marginLeft = '1%';
-                label.style.maxWidth = "35%";
-                label.style.textAlign = "left";
+                label.className = "hoeveelheid";
                 select.name = "selectType" + element.value.replaceAll(" ", "_");
                 select.id = "selectType" + element.value.replaceAll(" ", "_");
                 select.className = "hoeveelheid";
                 select.onchange = function() {
+                    console.log(select);
+                    console.log(select.style.width);
                     if (select.item(select.selectedIndex) === aanvullen) {
                         select.style.width = "60%";
                         input.style.display = "none";
                         input.required = false;
                     } else {
-                        select.style.width = "initial";
-                        input.style.display = "initial";
+                        select.style.width = "inherit";
+                        input.style.display = "inherit";
                         input.required = true;
                     }
+
+                    console.log(select);
+                    console.log(select.style.width);
                 };
                 shot.innerHTML = "shot";
                 shot.name = "shot";
@@ -89,24 +92,18 @@ function updateSelectQuantity(e) {
                 aanvullen.name = "aanvullen";
                 aanvullen.innerHTML = "aanvullen";
 
-                select.append(shot, fles, aanvullen);
-                if (type === "nonAlcohol") {
-                    select.insertBefore(scheutje, aanvullen);
-                }
-
+                select.append(shot, fles, scheutje, aanvullen);
                 div.appendChild(label);
                 div.appendChild(select);
                 div.appendChild(input);
-                div.appendChild(document.createElement("br"))
-                div.appendChild(document.createElement("br"))
                 div.id = element.innerHTML.replaceAll(" ", "_");
 
                 xAmount.appendChild(div);
-                if (xAmount.style.display === "none") xAmount.style.display = "initial";
+                if (xAmount.style.display === "none") xAmount.style.display = "flex";
 
             } else if (child != null && !element.selected) {
                 xAmount.removeChild(child);
-                if (xAmount.childElementCount <= 3) xAmount.style.display = "none";
+                if (xAmount.childElementCount <= 1) xAmount.style.display = "none";
             }
         }
     }
