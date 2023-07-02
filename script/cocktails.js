@@ -99,16 +99,22 @@ class Cocktail {
 		this.alcohol = alcohol;
 		this.nonAlcohol = nonAlcohol;
 
+		if (this.alcohol === undefined || this.alcohol === null) this.alcohol = {};
+		if (this.nonAlcohol === undefined || this.nonAlcohol === null) this.nonAlcohol = {};
+
 		let i = 0
-		for (let e of extras) {
-			if (typeof e !== "object") {
-				e = [e, 0];
-				extras[i] = e;
-			} else if (typeof e[1] !== "number") {
-				e[1] = 0;
-				extras[i] = e;
+
+		if (extras !== null) {
+			for (let e of extras) {
+				if (typeof e !== "object") {
+					e = [e, 0];
+					extras[i] = e;
+				} else if (typeof e[1] !== "number") {
+					e[1] = 0;
+					extras[i] = e;
+				}
+				i++;
 			}
-			i++;
 		}
 		this.extras = extras;
 

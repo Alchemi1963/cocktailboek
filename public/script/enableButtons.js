@@ -63,11 +63,11 @@ document.getElementById("alcoholAmount").innerHTML = "";
 
 //zorgt voor de interactie op de webpagina
 enableButton("selectNonAlcohol", "click", function(){
-	printToWebpage(returnSelected());
+	sort();
 });
 
 enableButton("selectAlcohol", "click", function(){
-	printToWebpage(returnSelected());
+	sort();
 });
 
 enableButton("randomCocktail", "click", function(){
@@ -79,7 +79,7 @@ enableButton("search", "keyup", function(){
 }, ["/admin/alcohol", "/admin/nonalcohol"]);
 
 enableButton("selectGlass", "change", function(){
-	printToWebpage(returnSelected());
+	sort();
 });
 
 enableButton("sort", "change", function(){
@@ -87,10 +87,10 @@ enableButton("sort", "change", function(){
 		case "Alfabetisch":
 			sortAlpha();
 			break;
-		case "Prijs laag -> Hoog":
+		case "Prijs laag -> hoog":
 			sortByPriceLH();
 			break;
-		case "Prijs hoog -> Laag":
+		case "Prijs hoog -> laag":
 			sortByPrice();
 			break;
 		case "Alcohol laag -> hoog":
@@ -98,6 +98,8 @@ enableButton("sort", "change", function(){
 			break;
 		case "Alcohol hoog -> laag":
 			sortByAlc();
+			break;
+		default:
 			break;
 		}
 }, ["/admin/alcohol", "/admin/nonalcohol"]);

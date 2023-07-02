@@ -248,6 +248,28 @@ function randomCocktail(){
 	document.getElementById('backToAll').style.display = "block";
 }
 
+function sort(){
+	switch(document.getElementById("sort").value){
+		case "Alfabetisch":
+			sortAlpha();
+			break;
+		case "Prijs laag -> hoog":
+			sortByPriceLH();
+			break;
+		case "Prijs hoog -> laag":
+			sortByPrice();
+			break;
+		case "Alcohol laag -> hoog":
+			sortByAlcLH();
+			break;
+		case "Alcohol hoog -> laag":
+			sortByAlc();
+			break;
+		default:
+			break;
+	}
+}
+
 //selecteer welk non alcohol en of glas je wilt
 function returnSelected(){
 	let glass = getId(document.getElementById('selectGlass').value);
@@ -260,7 +282,6 @@ function returnSelected(){
 	} else {
 		for (let key in cocktailDB) {
 			let item = cocktailDB[key];
-
 			if (item.nonAlcohol === null) {
 				item.nonAlcohol = [];
 			}
