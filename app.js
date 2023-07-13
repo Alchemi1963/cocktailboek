@@ -356,7 +356,7 @@ app.get("/admin/alcohols", (req, res) => {
 
 app.put("/admin/alcohols", (req, res) => {
 	checkCreateSession(req);
-	console.log("huuhh");
+	console.log(req.body);
 	if (checkLogin(req) && checkPerm(req)) {
 		if (req.query.remove) {
 			removeDrink(req.query.remove);

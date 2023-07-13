@@ -55,6 +55,7 @@ function updateSelectQuantity(e) {
                 let shot = document.createElement("option");
                 let fles = document.createElement("option");
                 let scheutje = document.createElement("option");
+                let milliliter = document.createElement("option");
                 let aanvullen = document.createElement("option");
                 input.type = "number";
                 input.step = "any";
@@ -89,10 +90,12 @@ function updateSelectQuantity(e) {
                 scheutje.name = "scheutje";
                 fles.innerHTML = "fles";
                 fles.name = "fles";
+                milliliter.innerHTML = "ml";
+                milliliter.name = "milliliter";
                 aanvullen.name = "aanvullen";
                 aanvullen.innerHTML = "aanvullen";
 
-                select.append(shot, fles, scheutje, aanvullen);
+                select.append(shot, fles, scheutje, milliliter, aanvullen);
                 div.appendChild(label);
                 div.appendChild(select);
                 div.appendChild(input);

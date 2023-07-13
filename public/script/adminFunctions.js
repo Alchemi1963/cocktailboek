@@ -39,6 +39,7 @@ function printToPage(database) {
 	for (let item in database) {
 		let type;
 		let drink = database[item];
+		let alcPer;
 
 		let div = document.createElement("div");
 		div.className = "drink";
@@ -62,7 +63,7 @@ function printToPage(database) {
 
 		if ("alcPer" in drink) {
 			type = "alcohols";
-			const alcPer = document.createElement("input");
+			alcPer = document.createElement("input");
 			alcPer.value = drink.alcPer;
 			alcPer.id = "alcPer";
 			alcPer.type = "number";
@@ -99,14 +100,18 @@ function printToPage(database) {
 			let put = new XMLHttpRequest();
 			let newDrink = {id: getId(drink.name), name: drink.name, price: price.value, vol: serveSize.value}
 
+			console.log(type);
+
 			if (type === "alcohols") {
 				newDrink["alcPer"] = alcPer.value;
 			}
+
+			console.log(newDrink);
 			put.open("PUT", "/admin/{}?edit={}".format(type, getId(drink.name)));
 			put.setRequestHeader("Content-Type", "application/json");
 			put.onreadystatechange = function() {
 				if (put.status === 200) {
-					location.reload();
+					// location.reload();
 				}
 			};
 			put.send(JSON.stringify(newDrink));
@@ -146,7 +151,6 @@ function render(database){
 
 function addNew() {
 	let type;
-
 	if (location.pathname.includes("nonalcohols")) {
 		type = "nonAlcohols";
 	} else {
@@ -174,7 +178,7 @@ function addNew() {
 	div.append(serveSizeLabel, serveSize, br());
 
 	const alcPer = document.createElement("input");
-	if (type === "alcohol") {
+	if (type === "alcohols") {
 		alcPer.value = 38;
 		alcPer.id = "alcPer";
 		alcPer.type = "number";

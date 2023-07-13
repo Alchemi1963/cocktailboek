@@ -172,6 +172,8 @@ class Cocktail {
 				vol = this.alcohol[key][0] * alcoholItem.vol;
 			} else if (this.alcohol[key] === "scheutje") {
 				vol = 0;
+			} else if (this.alcohol[key][1] === "milliliter") {
+				vol += this.alcohol[key][0];
 			} else {
 				vol = this.alcohol[key][0] * volShotglas;
 			}
@@ -195,6 +197,8 @@ class Cocktail {
 				vol = 0;
 			} else if (this.nonAlcohol[key][1] === "shot") {
 				vol = this.nonAlcohol[key][0] * volShotglas;
+			} else if (this.alcohol[key][1] === "milliliter") {
+				vol += this.nonAlcohol[key][0];
 			}
 			usedVolume += vol;
 			price += nonAlcoholItem.price * (vol / nonAlcoholItem.vol).toFixed(2);
