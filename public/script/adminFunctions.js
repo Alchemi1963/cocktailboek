@@ -61,7 +61,7 @@ function printToPage(database) {
 		div.append(serveSizeLabel, serveSize, br());
 
 		if ("alcPer" in drink) {
-			type = "alcohol";
+			type = "alcohols";
 			const alcPer = document.createElement("input");
 			alcPer.value = drink.alcPer;
 			alcPer.id = "alcPer";
@@ -75,7 +75,7 @@ function printToPage(database) {
 			div.append(alcPerLabel, alcPer, br());
 
 		} else{
-			type = "nonalcohol";
+			type = "nonalcohols";
 		}
 
 		const price = document.createElement("input");
@@ -99,17 +99,16 @@ function printToPage(database) {
 			let put = new XMLHttpRequest();
 			let newDrink = {id: getId(drink.name), name: drink.name, price: price.value, vol: serveSize.value}
 
-			if (type === "alcohol") {
+			if (type === "alcohols") {
 				newDrink["alcPer"] = alcPer.value;
 			}
-
 			put.open("PUT", "/admin/{}?edit={}".format(type, getId(drink.name)));
 			put.setRequestHeader("Content-Type", "application/json");
 			put.onreadystatechange = function() {
 				if (put.status === 200) {
 					location.reload();
 				}
-			}
+			};
 			put.send(JSON.stringify(newDrink));
 		};
 		edit.innerHTML = "Submit";
@@ -148,10 +147,10 @@ function render(database){
 function addNew() {
 	let type;
 
-	if (location.pathname.includes("nonalcohol")) {
-		type = "nonAlcohol";
+	if (location.pathname.includes("nonalcohols")) {
+		type = "nonAlcohols";
 	} else {
-		type = "alcohol";
+		type = "alcohols";
 	}
 
 	let div = document.createElement("div");
@@ -210,7 +209,7 @@ function addNew() {
 		let put = new XMLHttpRequest();
 		let newDrink = {id: getId(name.value), name: name.value, price: price.value, vol: serveSize.value}
 
-		if (type === "alcohol") {
+		if (type === "alcohols") {
 			newDrink["alcPer"] = alcPer.value;
 		}
 

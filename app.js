@@ -356,12 +356,15 @@ app.get("/admin/alcohols", (req, res) => {
 
 app.put("/admin/alcohols", (req, res) => {
 	checkCreateSession(req);
+	console.log("huuhh");
 	if (checkLogin(req) && checkPerm(req)) {
 		if (req.query.remove) {
 			removeDrink(req.query.remove);
 		} else if (req.query.edit) {
+			console.log("edit");
 			editDrink(req.body);
 		} else if (req.query.add) {
+			console.log("add");
 			addDrink(req.body);
 		}
 		res.sendStatus(200);
@@ -426,7 +429,7 @@ app.get("/admin/download", (req, res) => {
 			}
 
 			//number datavalidation
-			for (let r of ["D2:D640001", "G2:G640001", "J2:J640001"]){
+			for (let r of ["D2:D64001", "G2:G64001", "J2:J64001"]){
 				sheet.range(r).dataValidation({
 					type: "decimal",
 					allowBlank: true,
@@ -439,7 +442,7 @@ app.get("/admin/download", (req, res) => {
 			}
 
 			// glass validation
-			sheet.range("B2:B640001").dataValidation({
+			sheet.range("B2:B64001").dataValidation({
 				type: "list",
 				allowBlank: true,
 				showDropDown: true,
@@ -450,25 +453,25 @@ app.get("/admin/download", (req, res) => {
 			});
 
 			// type validation
-			for (let r of ["E2:E640001", "H2:H640001"]){
+			for (let r of ["E2:E64001", "H2:H64001"]){
 				sheet.range(r).dataValidation({
 					type: "list",
 					allowBlank: true,
 					showDropDown: true,
-					formula1: '"shot,scheutje,fles,aanvullen"',
+					formula1: '"shot,scheutje,fles,ml,aanvullen"',
 					prompt: true,
-					error: "Needs to be either shot, scheutje, fles or aanvullen",
+					error: "Needs to be either shot, scheutje, fles, ml or aanvullen",
 					errorTitle: "Wrong",
 					showErrorMessage: true
 				});
 			}
 
 			// alcohol validation
-			sheet.range("C2:C640001").dataValidation({
+			sheet.range("C2:C64001").dataValidation({
 				type: "list",
 				allowBlank: true,
 				showDropDown: true,
-				formula1: "alcohol!A2:A641",
+				formula1: "alcohol!A$2:A$641",
 				prompt: true,
 				error: "This is not one of the alcohol options",
 				errorTitle: "Wrong",
@@ -476,10 +479,10 @@ app.get("/admin/download", (req, res) => {
 			});
 
 			//nonAlcohol validation
-			sheet.range("F2:F640001").dataValidation({
+			sheet.range("F2:F64001").dataValidation({
 				type: "list",
 				allowBlank: true,
-				formula1: "nonAlcohol!A2:A641",
+				formula1: "nonAlcohol!A$2:A$641",
 				prompt: true,
 				error: "This is not one of the alcohol options",
 				errorTitle: "Wrong",

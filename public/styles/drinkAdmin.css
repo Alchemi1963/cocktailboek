@@ -53,14 +53,14 @@ label {
 	max-width: 45%;
 	max-height: 100%;
 	margin-left: 5%;
-	float: left;
+	left: 0;
 }
 
 #remove{
 	max-width:  45%;
 	max-height: 100%;
 	margin-right: 5%;
-	float: right;
+	right: 0;
 }
 
 
