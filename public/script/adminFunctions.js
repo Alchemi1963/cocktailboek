@@ -100,18 +100,15 @@ function printToPage(database) {
 			let put = new XMLHttpRequest();
 			let newDrink = {id: getId(drink.name), name: drink.name, price: price.value, vol: serveSize.value}
 
-			console.log(type);
-
 			if (type === "alcohols") {
 				newDrink["alcPer"] = alcPer.value;
 			}
 
-			console.log(newDrink);
 			put.open("PUT", "/admin/{}?edit={}".format(type, getId(drink.name)));
 			put.setRequestHeader("Content-Type", "application/json");
 			put.onreadystatechange = function() {
 				if (put.status === 200) {
-					// location.reload();
+					location.reload();
 				}
 			};
 			put.send(JSON.stringify(newDrink));
@@ -278,7 +275,6 @@ if (location.pathname.includes("/admin/cocktails/edit")) {
 
 	if (cocktailID in cocktailDB) {
 		let cocktail = cocktailDB[cocktailID];
-		console.log(cocktail);
 
 		document.getElementById("name").value = cocktail.name;
 		document.getElementById("selectGlass").value = cocktail.glass;

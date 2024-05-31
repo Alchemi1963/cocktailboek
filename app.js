@@ -215,7 +215,6 @@ app.get("/login", (req, res) => {
 				postRES.on("data", d => data.push(d));
 				postRES.on("end", () => {
 					let jsonResponse = JSON.parse(Buffer.concat(data));
-					console.log(jsonResponse);
 
 					let token = jsonResponse.access_token;
 
@@ -331,7 +330,6 @@ app.post("/admin/cocktails/edit", (req, res) => {
 		const data = req.body;
 		removeCocktail(data.cocktail);
 		if (!parseForm(data)){
-			console.log(data);
 			res.render("error", {location: "/admin/cocktails/edit", errorcode: "336 + 64 = 400 Bad Request", message: "De cocktail kon niet aangepast worden. Check de logs voor details."});
 			Cocktail.create(old.name, old.glass, old.alcohol, old.nonAlcohol, old.creator, old.desc, old.extras);
 			return;
@@ -356,15 +354,12 @@ app.get("/admin/alcohols", (req, res) => {
 
 app.put("/admin/alcohols", (req, res) => {
 	checkCreateSession(req);
-	console.log(req.body);
 	if (checkLogin(req) && checkPerm(req)) {
 		if (req.query.remove) {
 			removeDrink(req.query.remove);
 		} else if (req.query.edit) {
-			console.log("edit");
 			editDrink(req.body);
 		} else if (req.query.add) {
-			console.log("add");
 			addDrink(req.body);
 		}
 		res.sendStatus(200);

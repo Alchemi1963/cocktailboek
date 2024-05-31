@@ -161,6 +161,7 @@ class Cocktail {
 		let fill = []
 		for (let key in this.alcohol) {
 			let alcoholItem = alcoholDB[getId(key)];
+			console.log(key, alcoholItem, this.alcohol);
 
 			if (alcoholItem === undefined || alcoholItem === null) throw new Error(key + " is not defined!");
 

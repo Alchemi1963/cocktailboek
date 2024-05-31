@@ -69,20 +69,15 @@ function updateSelectQuantity(e) {
                 select.id = "selectType" + element.value.replaceAll(" ", "_");
                 select.className = "hoeveelheid";
                 select.onchange = function() {
-                    console.log(select);
-                    console.log(select.style.width);
                     if (select.item(select.selectedIndex) === aanvullen) {
                         select.style.width = "60%";
                         input.style.display = "none";
                         input.required = false;
                     } else {
-                        select.style.width = "inherit";
+                        select.style.width = "calc(30% - 2px)";
                         input.style.display = "inherit";
                         input.required = true;
                     }
-
-                    console.log(select);
-                    console.log(select.style.width);
                 };
                 shot.innerHTML = "shot";
                 shot.name = "shot";
